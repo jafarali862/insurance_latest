@@ -57,3 +57,11 @@ $('input.select-answer-checkbox-garage').on('change', function () {
         Route::post('/templates/{template}/update', [CompanyController::class, 'update_templates'])->name('templates.update_templates');
         Route::delete('/templates/{template}', [CompanyController::class, 'destroy_templates'])->name('templates.destroy_templates');
         Route::get('/templates/{id}/preview', [CompanyController::class, 'preview'])->name('templates.preview');
+
+
+<li class="nav-item">
+                            <a href="{{ route('templates.list_templates') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Templates</p>
+                            </a>
+                        </li>
