@@ -42,3 +42,18 @@ $('input.select-answer-checkbox-garage').on('change', function () {
             Select this garage
             </div>
             @endif
+
+
+
+
+
+
+
+
+      Route::get('/templates/create', [CompanyController::class, 'create_templates'])->name('templates.create_templates');
+        Route::post('/templates', [CompanyController::class, 'store_templates'])->name('templates.store_templates');
+        Route::get('/templates', [CompanyController::class, 'list_templates'])->name('templates.list_templates');
+        Route::get('/templates/{template}/edit', [CompanyController::class, 'edit_templates'])->name('templates.edit_templates');
+        Route::post('/templates/{template}/update', [CompanyController::class, 'update_templates'])->name('templates.update_templates');
+        Route::delete('/templates/{template}', [CompanyController::class, 'destroy_templates'])->name('templates.destroy_templates');
+        Route::get('/templates/{id}/preview', [CompanyController::class, 'preview'])->name('templates.preview');
