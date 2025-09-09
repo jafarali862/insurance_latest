@@ -16,7 +16,7 @@ class ReportGenerateController extends Controller
 
     public function requestReport(Request $request)
     {
-        $search = $request->input('search', '');
+        // $search = $request->input('search', '');
         
         // $reports = DB::table('assign_work_data as awd')
         //         ->leftJoin('case_assignments as ca', 'awd.case_id', '=', 'ca.id')
@@ -42,28 +42,70 @@ class ReportGenerateController extends Controller
         //     ->orderBy('ca.id', 'desc') 
         //     ->paginate(10);
 
-        $reports =  DB::table('assign_work_data as awd')
-                    ->join('questionnaire_submissions as qs', 'awd.case_id', '=', 'qs.case_id')
-                    ->leftJoin('case_assignments as ca', 'awd.case_id', '=', 'ca.id')
-                    ->leftJoin('insurance_customers as ic', 'ca.customer_id', '=', 'ic.id')
-                    ->leftJoin('insurance_companies as icomp', 'ca.company_id', '=', 'icomp.id')
-                    ->when(!empty($search), function ($query) use ($search) {
-                    $query->where(function ($q) use ($search) {
-                    $q->where('ic.name', 'like', '%' . $search . '%')
-                    ->orWhere('icomp.name', 'like', '%' . $search . '%')
-                    ->orWhere('ca.date', 'like', '%' . $search . '%')
-                    ->orWhere('ca.type', 'like', '%' . $search . '%');
-                    });
-                    })
+        // $reports =  DB::table('assign_work_data as awd')
+        //             ->join('questionnaire_submissions as qs', 'awd.case_id', '=', 'qs.case_id')
+        //             ->leftJoin('case_assignments as ca', 'awd.case_id', '=', 'ca.id')
+        //             ->leftJoin('insurance_customers as ic', 'ca.customer_id', '=', 'ic.id')
+        //             ->leftJoin('insurance_companies as icomp', 'ca.company_id', '=', 'icomp.id')
+        //             ->when(!empty($search), function ($query) use ($search) {
+        //             $query->where(function ($q) use ($search) {
+        //             $q->where('ic.name', 'like', '%' . $search . '%')
+        //             ->orWhere('icomp.name', 'like', '%' . $search . '%')
+        //             ->orWhere('ca.date', 'like', '%' . $search . '%')
+        //             ->orWhere('ca.type', 'like', '%' . $search . '%');
+        //             });
+        //             })
 
-                    ->select(DB::raw('MAX(awd.id) as report_id'), 'qs.case_id','ca.id as case_assignment_id','ic.name as customer_name',
-                            'ic.crime_number','ic.police_station','icomp.name as company_name','ca.date','ca.type')
+        //             ->select(DB::raw('MAX(awd.id) as report_id'), 'qs.case_id','ca.id as case_assignment_id','ic.name as customer_name',
+        //                     'ic.crime_number','ic.police_station','icomp.name as company_name','ca.date','ca.type')
 
-                    ->groupBy('qs.case_id','ca.id','ic.name','ic.crime_number','ic.police_station','icomp.name','ca.date','ca.type')
-                    ->orderBy('ca.id', 'desc')
-                    ->paginate(10);
+        //             ->groupBy('qs.case_id','ca.id','ic.name','ic.crime_number','ic.police_station','icomp.name','ca.date','ca.type')
+        //             ->orderBy('ca.id', 'desc')
+        //             ->paginate(10);
 
-        return view('dashboard.report.report-request', ['reports' => $reports]);
+
+            $search = $request->input('search', '');
+            $fromDate = $request->input('from_date');
+            $toDate = $request->input('to_date');
+
+            $reports = DB::table('assign_work_data as awd')
+            ->join('questionnaire_submissions as qs', 'awd.case_id', '=', 'qs.case_id')
+            ->leftJoin('case_assignments as ca', 'awd.case_id', '=', 'ca.id')
+            ->leftJoin('insurance_customers as ic', 'ca.customer_id', '=', 'ic.id')
+            ->leftJoin('insurance_companies as icomp', 'ca.company_id', '=', 'icomp.id')
+
+            ->when(!empty($search), function ($query) use ($search) 
+            {
+            $query->where(function ($q) use ($search) {
+            $q->where('ic.name', 'like', '%' . $search . '%')
+            ->orWhere('icomp.name', 'like', '%' . $search . '%')
+            ->orWhere('ca.date', 'like', '%' . $search . '%')
+            ->orWhere('ca.type', 'like', '%' . $search . '%');
+            });
+            })
+
+            ->when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) 
+            {
+            $query->whereBetween('qs.created_at', [
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+            ]);
+            })
+
+            ->select(DB::raw('MAX(awd.id) as report_id'), 'qs.case_id', 'ca.id as case_assignment_id', 'ic.name as customer_name',
+            'ic.crime_number', 'ic.police_station', 'icomp.name as company_name', 'ca.date', 'ca.type')
+            ->groupBy('qs.case_id', 'ca.id', 'ic.name', 'ic.crime_number', 'ic.police_station', 'icomp.name', 'ca.date', 'ca.type')
+            ->orderBy('ca.id', 'desc')
+            ->paginate(10);
+
+            return view('dashboard.report.report-request', [
+            'reports' => $reports,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+            'search' => $search,
+            ]);
+
+        // return view('dashboard.report.report-request', ['reports' => $reports]);
     }
 
     public function requestReportView($id, Request $request)
@@ -84,6 +126,8 @@ class ReportGenerateController extends Controller
             ->select('gd.*', 'u.name as executive_name')
             ->where('gd.assign_work_id', $id)
             ->get();
+
+            
 
         $garageQuestions = Question::where('data_category', 'garage_data')->get();
         $driverQuestions = Question::where('data_category', 'driver_data')->get();

@@ -269,11 +269,13 @@ class CaseController extends Controller
         $startDate  = Carbon::today();
         $endDate    = Carbon::tomorrow()->subSecond();  // End of today
         } 
+
         elseif ($period === 'weekly') 
         {
         $startDate  = Carbon::now()->startOfWeek();
         $endDate    = Carbon::now()->endOfWeek();
         } 
+        
         elseif ($period === 'monthly') 
         {
         $startDate  = Carbon::now()->startOfMonth();
@@ -314,7 +316,8 @@ class CaseController extends Controller
 
 
         $query = DB::table('case_assignments')
-        ->where(function ($q) use ($executive_id) {
+        ->where(function ($q) use ($executive_id) 
+        {
         $q->where('executive_driver', $executive_id)
         ->orWhere('executive_garage', $executive_id)
         ->orWhere('executive_spot', $executive_id)
@@ -335,21 +338,20 @@ class CaseController extends Controller
         'completed' => $completed,
         ]);
 
-
     }
 
 
     // public function storequestion(Request $request)
     // {
-    
-    // if(!Auth::check()) 
+
+    // if (!Auth::check()) 
     // {
     // return response()->json(['error' => 'Unauthorized'], 401);
     // }
 
     // $data = $request->all();
 
-    // if(!isset($data['id']) || !isset($data['works'])) 
+    // if (empty($data['id']) || empty($data['works'])) 
     // {
     // return response()->json(['error' => 'Invalid data'], 422);
     // }
@@ -359,13 +361,11 @@ class CaseController extends Controller
     // $submission->full_data = json_encode($data);
     // $submission->save();
 
-    // DB::table('case_assignments')
-    //     ->where('id', $submission->case_id)
-    //     ->update(['status' => 2]);
 
-    // DB::table('insurance_cases')
-    //     ->where('id', $submission->case_id)
-    //     ->update(['case_status' => 0]);
+    // DB::table('case_assignments')
+    // ->where('id', $submission->case_id)
+    // ->update(['status' => 2]);
+
 
     // $workToTableMap = [
     // 'driver'   => 'driver_data',
@@ -377,54 +377,89 @@ class CaseController extends Controller
 
     // foreach ($data['works'] as $workItem) 
     // {
-    // if (!isset($workItem['work'], $workItem['questionnaire'])) 
+    // if (empty($workItem['work']) || empty($workItem['questionnaire'])) 
     // {
     // continue;
     // }
 
-    // $workType = $workItem['work'];
+    // $workType      = $workItem['work'];
     // $questionnaire = $workItem['questionnaire'];
-    // $assignWorkId = $data['assign_id'];
-    // $executiveId = $workItem['executive_id'] ?? null;
-    // $table = $workToTableMap[$workType] ?? ($workType . '_data');
+    // $assignWorkId  = $data['assign_id'];
+    // $executiveId   = $workItem['executive_id'] ?? null;
+    // $table         = $workToTableMap[$workType] ?? ($workType . '_data');
 
-    // $insertData = [
-    //     'assign_work_id' => $assignWorkId,
-    //     'executive_id'   => $executiveId,
-    //     'created_at'     => now(),
-    //     'updated_at'     => now(),
+    // if (!Schema::hasTable($table)) 
+    // {
+    // continue;
+    // }
+
+    // $baseInsertData = [
+    // 'assign_work_id' => $assignWorkId,
+    // 'executive_id'   => $executiveId,
+    // 'created_at'     => now(),
+    // 'updated_at'     => now(),
     // ];
 
+    // $hasSingleFields = false;
 
     // foreach ($questionnaire as $field) 
     // {
-    //     if (isset($field['name']) && array_key_exists('data', $field)) 
-    //     {
-    //         $insertData[$field['name']] = is_array($field['data'])
-    //             ? json_encode($field['data'])
-    //             : $field['data'];
-    //     }
+    // if (!isset($field['name']) || !array_key_exists('data', $field)) 
+    // {
+    // continue;
     // }
 
-    // if (Schema::hasTable($table)) 
+    // $name  = $field['name'];
+    // $value = $field['data'];
+
+    // if (is_array($value)) 
     // {
-    //     DB::table($table)->insert($insertData); 
+    // foreach ($value as $item) 
+    // {
+    //     $fileRow = $baseInsertData;
+    //     $fileRow[$name] = $item;
+
+    //     DB::table($table)->insert($fileRow);
 
     //     $oldTable = $table . '_old';
+
     //     if (Schema::hasTable($oldTable)) 
     //     {
-    //     DB::table($oldTable)->insert($insertData);
+    //         DB::table($oldTable)->insert($fileRow);
     //     }
     // }
+    // } 
+
+    // else 
+    // {
+    // $baseInsertData[$name] = $value;
+    // $hasSingleFields = true;
+    // }
     // }
 
 
-    // return response()->json(['status' => 'success', 'id' => $submission->id]);
+    // if ($hasSingleFields) 
+    // {
+    // DB::table($table)->insert($baseInsertData);
+
+    // $oldTable = $table . '_old';
+    // if (Schema::hasTable($oldTable)) 
+    // {
+    // DB::table($oldTable)->insert($baseInsertData);
     // }
+    // }
+    // }
+
+    // return response()->json([
+    // 'status' => 'success',
+    // 'id'     => $submission->id,
+    // ]);
+
+    // }
+
 
     public function storequestion(Request $request)
-    {
-
+{
     if (!Auth::check()) {
         return response()->json(['error' => 'Unauthorized'], 401);
     }
@@ -435,20 +470,18 @@ class CaseController extends Controller
         return response()->json(['error' => 'Invalid data'], 422);
     }
 
+    // Save the questionnaire submission
     $submission = new QuestionnaireSubmission();
     $submission->case_id   = $data['id'];
     $submission->full_data = json_encode($data);
     $submission->save();
 
-    // Update related case status
+    // Update related case status (remove duplicate)
     DB::table('case_assignments')
         ->where('id', $submission->case_id)
         ->update(['status' => 2]);
 
-    DB::table('insurance_cases')
-        ->where('id', $submission->case_id)
-        ->update(['case_status' => 0]);
-
+    // Table mapping
     $workToTableMap = [
         'driver'   => 'driver_data',
         'garage'   => 'garage_data',
@@ -457,9 +490,15 @@ class CaseController extends Controller
         'accident' => 'accident_person_data',
     ];
 
+
+    $ownerDataUsed = false;
+    $garageDataUsed = false;
+    $driverDataUsed = false;
+    $spotDataUsed = false;
+    $accidentDataUsed = false;
+
     foreach ($data['works'] as $workItem) {
-        if (empty($workItem['work']) || empty($workItem['questionnaire'])) 
-        {
+        if (empty($workItem['work']) || empty($workItem['questionnaire'])) {
             continue;
         }
 
@@ -473,7 +512,27 @@ class CaseController extends Controller
             continue;
         }
 
-        // Track single field data (non-array) in main row
+
+        if ($table === 'owner_data') {
+            $ownerDataUsed = true;
+        } elseif ($table === 'garage_data') {
+            $garageDataUsed = true;
+        }
+        elseif ($table === 'driver_data') {
+            $driverDataUsed = true;
+        }
+        elseif ($table === 'driver_data') {
+            $driverDataUsed = true;
+        }
+        elseif ($table === 'spot_data') {
+            $spotDataUsed = true;
+        }
+
+        elseif ($table === 'accident_person_data') {
+            $accidentDataUsed = true;
+        }
+
+
         $baseInsertData = [
             'assign_work_id' => $assignWorkId,
             'executive_id'   => $executiveId,
@@ -491,7 +550,6 @@ class CaseController extends Controller
             $name  = $field['name'];
             $value = $field['data'];
 
-            // If array (multiple uploads), insert each separately
             if (is_array($value)) {
                 foreach ($value as $item) {
                     $fileRow = $baseInsertData;
@@ -505,13 +563,11 @@ class CaseController extends Controller
                     }
                 }
             } else {
-                // Normal single value field (not array)
                 $baseInsertData[$name] = $value;
                 $hasSingleFields = true;
             }
         }
 
-        // If any normal fields exist, insert them in one row
         if ($hasSingleFields) {
             DB::table($table)->insert($baseInsertData);
 
@@ -522,11 +578,43 @@ class CaseController extends Controller
         }
     }
 
+
+    if ($ownerDataUsed) {
+        DB::table('assign_work_data')
+            ->where('case_id', $submission->case_id)
+            ->increment('owner_re_assign_count', 1, ['owner_reassign_status' => 1]);
+    }
+
+    if ($garageDataUsed) {
+        DB::table('assign_work_data')
+            ->where('case_id', $submission->case_id)
+            ->increment('garage_re_assign_count', 1, ['garage_reassign_status' => 1]);
+    }
+
+    if ($driverDataUsed) {
+        DB::table('assign_work_data')
+            ->where('case_id', $submission->case_id)
+            ->increment('driver_re_assign_count', 1, ['driver_reassign_status' => 1]);
+    }
+
+    if ($spotDataUsed) {
+        DB::table('assign_work_data')
+            ->where('case_id', $submission->case_id)
+            ->increment('spot_re_assign_count', 1, ['spot_reassign_status' => 1]);
+    }
+
+    if ($accidentDataUsed) {
+        DB::table('assign_work_data')
+            ->where('case_id', $submission->case_id)
+            ->increment('accident_person_reassign_count', 1, ['accident_person_reassign_status' => 1]);
+    }
+
     return response()->json([
         'status' => 'success',
         'id'     => $submission->id,
     ]);
 }
+
 
 
     public function getAssignedWorks(Request $request)
@@ -536,7 +624,26 @@ class CaseController extends Controller
             'assign_id'=>'required',
         ]);
 
-         $assignWorkData=AssignWorkData::leftJoin('accident_person_data','assign_work_data.id','=','accident_person_data.assign_work_id')
+        //  $assignWorkData= AssignWorkData::leftJoin('accident_person_data','assign_work_data.id','=','accident_person_data.assign_work_id')
+        //                                 ->leftJoin('driver_data','driver_data.assign_work_id','=','assign_work_data.id')
+        //                                 ->leftJoin('garage_data','garage_data.assign_work_id','=','assign_work_data.id')
+        //                                 ->leftJoin('owner_data','owner_data.assign_work_id','=','assign_work_data.id')
+        //                                 ->leftJoin('spot_data','spot_data.assign_work_id','=','assign_work_data.id')
+        //                                 ->leftJoin('users as au','au.id','=','accident_person_data.executive_id')
+        //                                 ->leftJoin('users as du','du.id','=','driver_data.executive_id')
+        //                                 ->leftJoin('users as gu','gu.id','=','garage_data.executive_id')
+        //                                 ->leftJoin('users as ou','ou.id','=','owner_data.executive_id')
+        //                                 ->leftJoin('users as su','su.id','=','spot_data.executive_id')
+        //                                 ->where('assign_work_data.case_id',$request->assign_id)
+        //                                 ->select('accident_person_data.*','accident_person_data.ration_card as accident_ration_card',
+        //                                         'driver_data.*','driver_data.ration_card as driver_ration_card','garage_data.*','owner_data.*',
+        //                                         'owner_data.ration_card as owner_ration_card','spot_data.*','au.name as au_name','du.name as du_name',
+        //                                         'gu.name as gu_name','ou.name as ou_name','su.name as su_name')
+        //                                 ->distinct()
+        //                                 ->get();
+
+
+         $assignWorkData= AssignWorkData::leftJoin('accident_person_data','assign_work_data.id','=','accident_person_data.assign_work_id')
                                         ->leftJoin('driver_data','driver_data.assign_work_id','=','assign_work_data.id')
                                         ->leftJoin('garage_data','garage_data.assign_work_id','=','assign_work_data.id')
                                         ->leftJoin('owner_data','owner_data.assign_work_id','=','assign_work_data.id')
@@ -547,12 +654,10 @@ class CaseController extends Controller
                                         ->leftJoin('users as ou','ou.id','=','owner_data.executive_id')
                                         ->leftJoin('users as su','su.id','=','spot_data.executive_id')
                                         ->where('assign_work_data.case_id',$request->assign_id)
-                                        ->select('accident_person_data.*','accident_person_data.ration_card as accident_ration_card',
-                                                'driver_data.*','driver_data.ration_card as driver_ration_card','garage_data.*','owner_data.*',
-                                                'owner_data.ration_card as owner_ration_card','spot_data.*','au.name as au_name','du.name as du_name',
-                                                'gu.name as gu_name','ou.name as ou_name','su.name as su_name'
-                                                )->distinct()
-                                                ->get();
+                                        ->select('accident_person_data.*','driver_data.*','garage_data.*','owner_data.*','spot_data.*','au.name as au_name',
+                                                 'du.name as du_name','gu.name as gu_name','ou.name as ou_name','su.name as su_name')
+                                        ->distinct()
+                                        ->get();
 
          return response()->json(['assignedWorkData'=>$assignWorkData],200);                               
     }

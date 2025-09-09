@@ -28,6 +28,7 @@
         </div>
 
         <div class="card-body table-responsive p-0">
+           
             <table id="companyTable" class="table table-bordered table-hover text-center mb-0" style="width:100%">
                 <thead class="thead-dark">
                     <tr>
@@ -59,6 +60,15 @@
                                 <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-sm btn-info" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
+
+                            <form action="{{ route('companies.destroy', $company->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this company?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                            </button>
+                            </form>
+
                             </td>
                         </tr>
                     @endforeach

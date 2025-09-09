@@ -29,40 +29,53 @@
         </div>
 
         <div class="card-body table-responsive p-0">
-            <table id="questionsTable" class="table table-bordered table-hover text-center mb-0" style="width: 100%">
-                <thead class="thead-dark">
-                    <tr>
-                         <th>ID</th>
-                        <th>Question</th>
-                        <th>Input Type</th>
-                        <th>Data Category</th>
-                        <th style="width: 120px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                           @php $i = 1; @endphp
-                    @foreach($questions as $q)
-                    <tr>
-                          <td>{{ $i++ }}</td>
-                        <td>{{ $q->question }}</td>
-                        <td>{{ $q->input_type }}</td>
-                        <td>{{ $q->data_category }}</td>
-                        <td>
-                            <a href="{{ route('questions.edit_question', $q->id) }}" class="btn btn-sm btn-info" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('questions.destroy_question', $q->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger" title="Delete">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+           
+          <table id="questionsTable" class="table table-bordered table-hover text-center mb-0" style="width: 100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Question</th>
+            <th>Input Type</th>
+            <th>Data Category</th>
+            <th>Templates</th> {{-- ✅ new column --}}
+            <th style="width: 120px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @php $i = 1; @endphp
+        @foreach($questions as $q)
+            <tr>
+                <td>{{ $i++ }}</td>
+                <td>{{ $q->question }}</td>
+                <td>{{ $q->input_type }}</td>
+                <td>{{ $q->data_category }}</td>
+                <td>
+                    @if($q->templates->isNotEmpty())
+                        @foreach($q->templates as $template)
+                            <span class="badge bg-primary">{{ $template->template_id }}</span>
+                        @endforeach
+                    @else
+                        <span class="text-muted">Not Assigned</span>
+                    @endif
+                </td>
+                <td>
+                    <a href="{{ route('questions.edit_question', $q->id) }}" class="btn btn-sm btn-info" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="{{ route('questions.destroy_question', $q->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
+            
 
             @if($questions->isEmpty())
                 <div class="p-3 text-center text-muted">

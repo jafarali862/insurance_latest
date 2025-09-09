@@ -70,24 +70,65 @@ class ExecutiveController extends Controller
         }
     }
 
-    public function checkInData(Request $request)
-    {
-        $user = Auth::user();
-        date_default_timezone_set('Asia/Kolkata');
-        $date = date('d-m-Y');
 
-        $lastReading = OdometerReading::where('user_id', $user->id)->latest()->first();
+    // public function checkInData(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     date_default_timezone_set('Asia/Kolkata');
+    //     $date = date('d-m-Y');
 
-        if ($lastReading) {
-            if ($lastReading->check_in_date === $date) {
-                if ($lastReading->status == 1) {
-                    return response()->json(['message' => 'Data not found'], 346);
-                }
-                return response()->json($lastReading, 200);
+    //     $lastReading = OdometerReading::where('user_id', $user->id)->latest()->first();
+
+    //     if($lastReading) 
+    //     {
+    //         if ($lastReading->check_in_date === $date) 
+    //         {
+    //             if ($lastReading->status == 1) 
+    //             {
+    //                 return response()->json(['message' => 'Data not found'], 346);
+    //             }
+    //             return response()->json($lastReading, 200);
+    //         }
+    //     }
+    //     return response()->json(['message' => 'Data not found'], 346);
+    // }
+
+
+ 
+
+public function checkInData(Request $request)
+{
+    $user = Auth::user();
+    $date = date('d-m-Y');
+
+    $lastReading = OdometerReading::where('user_id', $user->id)->latest()->first();
+
+    if ($lastReading) {
+        if ($lastReading->check_in_date === $date) {
+            if ($lastReading->status == 1) {
+                return response()->json(['message' => 'Data not found'], 346);
             }
+
+            $data = $lastReading->toArray();
+
+     
+            $data['created_at'] = Carbon::parse($lastReading->created_at)
+                ->format('d-m-Y h:i A');
+
+            $data['updated_at'] = Carbon::parse($lastReading->updated_at)
+                ->format('d-m-Y h:i A');
+
+            // Remove original UTC timestamps
+            // unset($data['created_at'], $data['updated_at']);
+
+            return response()->json($data, 200);
         }
-        return response()->json(['message' => 'Data not found'], 346);
     }
+
+    return response()->json(['message' => 'Data not found'], 346);
+}
+
+
 
     public function passwordResetRequest(Request $request)
     {
@@ -121,12 +162,12 @@ class ExecutiveController extends Controller
         $today = Carbon::today();
 
         $locations = array_merge(
-            GarageData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
-            DriverData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
-            OwnerData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
-            SpotData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
-            AccidentPersonData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray()
-        );
+                    GarageData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
+                    DriverData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
+                    OwnerData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
+                    SpotData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray(),
+                    AccidentPersonData::where('executive_id', $user->id)->whereDate('created_at', $today)->pluck('location')->toArray()
+                    );
 
         return response()->json($locations, 200);
     }
@@ -150,13 +191,16 @@ class ExecutiveController extends Controller
         $garageData = GarageData::where('executive_id', $user->id)
             ->whereBetween('created_at', [$weekStart, $weekEnd])
             ->get();
-        foreach ($garageData as $data) {
+
+        foreach ($garageData as $data) 
+        {
             $weeklyCounts[strtolower($data->created_at->format('D'))]++;
         }
 
         $driverData = DriverData::where('executive_id', $user->id)
             ->whereBetween('created_at', [$weekStart, $weekEnd])
             ->get();
+
         foreach ($driverData as $data) {
             $weeklyCounts[strtolower($data->created_at->format('D'))]++;
         }
@@ -164,6 +208,7 @@ class ExecutiveController extends Controller
         $ownerData = OwnerData::where('executive_id', $user->id)
             ->whereBetween('created_at', [$weekStart, $weekEnd])
             ->get();
+
         foreach ($ownerData as $data) {
             $weeklyCounts[strtolower($data->created_at->format('D'))]++;
         }
@@ -171,6 +216,7 @@ class ExecutiveController extends Controller
         $spotData = SpotData::where('executive_id', $user->id)
             ->whereBetween('created_at', [$weekStart, $weekEnd])
             ->get();
+
         foreach ($spotData as $data) {
             $weeklyCounts[strtolower($data->created_at->format('D'))]++;
         }
@@ -178,6 +224,7 @@ class ExecutiveController extends Controller
         $accidentPersonData = AccidentPersonData::where('executive_id', $user->id)
             ->whereBetween('created_at', [$weekStart, $weekEnd])
             ->get();
+            
         foreach ($accidentPersonData as $data) {
             $weeklyCounts[strtolower($data->created_at->format('D'))]++;
         }

@@ -24,8 +24,7 @@
                     <h3 class="card-title">Add Company</h3>
                 </div>
 
-                <div class="alert alert-success" id="successMessage" style="display:none;margin-top: 10px;
-    margin-bottom: 0px;"></div>
+                <div class="alert alert-success" id="successMessage" style="display:none;margin-top: 10px;margin-bottom: 0px;"></div>
 
                 <form id="companyForm" method="POST" action="{{ route('companies.store') }}">
                     @csrf
@@ -36,7 +35,7 @@
                         </div>
 
                         <!-- Tabs for Insurance Types -->
-                           <div class="card card-secondary">
+                           <div class="card">
                             <div class="card-header p-2">
                                 <ul class="nav nav-pills">
                                     <li class="nav-item"><a class="nav-link" href="#garage" data-toggle="tab">Garage Data</a></li>
@@ -79,27 +78,45 @@
                             <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="selectTemplate">Select Final Report Template <span class="text-danger">*</span></label>
-                            <select class="form-control" id="selectTemplate" name="template">
-                                <option value="" disabled selected>Please select</option>
-                                @for ($i = 1; $i <= 8; $i++)
-                                    <option value="{{ $i }}">Template {{ $i }}</option>
-                                @endfor
-                                <!-- <option value="9">Default Template</option> -->
-                            </select>
-                            <span class="text-danger" id="template-error"></span>
-                        </div>
-                    </div>
+            <div class="form-group">
+            <label for="selectTemplate">Select Final Report Template <span class="text-danger">*</span></label>
+            <select class="form-control" id="selectTemplate" name="template">
+            <option value="" disabled selected>Please select</option>
+            @for ($i = 1; $i <= 8; $i++)
+            <option value="{{ $i }}">Template {{ $i }}</option>
+            @endfor
 
-                    <div class="card-footer text-left">
-                        <button type="submit" class="btn btn-success">Add Company</button>
-                    </div>
-                </form>
+            </select>
+            <span class="text-danger" id="template-error"></span>
             </div>
+
+        <!-- <div class="form-group">
+        <label for="selectTemplate">Select Final Report Template <span class="text-danger">*</span></label>
+        <select class="form-control" id="selectTemplate" name="template" required>
+        <option value="" disabled selected>Please select</option>
+        @foreach ($templates as $template)
+        <option value="{{ $template->id }}">{{ $template->template_id }}</option>
+        @endforeach
+        </select>
         </div>
-    </div>
-</div>
+
+        <div id="tabsContainer" class="form-group" style="display:none;">
+        <label>Select Tabs for Questionnaire</label>
+        <div id="tabsContent"></div>
+        </div> -->
+
+
+
+        </div>
+        <div class="card-footer text-left">
+        <button type="submit" class="btn btn-success">Add Company</button>
+        </div>
+        </form>
+
+        </div>
+        </div>
+        </div>
+        </div>
 
 <style>
 
@@ -107,10 +124,20 @@
 {
 color:#fff;
 }
+
+.nav-pills .nav-link {
+    color: #000000;
+    font-weight: 550;
+}
+
 </style>
 
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+
+
 <script>
     const categoryMap = {
         'garage': 'garage_data',
@@ -193,4 +220,88 @@ color:#fff;
         });
     });
 </script>
+
+
+<script>
+document.getElementById('companyForm').addEventListener('submit', function(e) {
+    const categories = ['garage', 'driver', 'spot', 'meeting', 'accident'];
+    let hasChecked = false;
+
+    for (let cat of categories) {
+        const checkboxes = document.querySelectorAll(`input[name="selected_questions[${cat}][]"]`);
+        if ([...checkboxes].some(chk => chk.checked)) {
+            hasChecked = true;
+            break;
+        }
+    }
+
+    if (!hasChecked) {
+        e.preventDefault();
+        alert("Please select at least one checkbox in any category.");
+    }
+});
+</script>
+
+
+
+
+    @push('scripts')
+    <script>
+    document.getElementById('selectTemplate').addEventListener('change', function () {
+    const templateId = this.value;
+    const tabsContainer = document.getElementById('tabsContainer');
+    const tabsContent = document.getElementById('tabsContent');
+
+    if (!templateId) return;
+
+    // Clear previous content
+    tabsContent.innerHTML = '';
+    tabsContainer.style.display = 'none';
+
+    fetch(`/get-template-tabs/${templateId}`)
+    .then(response => response.json())
+    .then(data => {
+    if (data.success) {
+    const grouped = data.grouped_questions;
+
+    Object.keys(grouped).forEach(category => {
+    const fields = grouped[category];
+
+    const categoryTitle = document.createElement('strong');
+    categoryTitle.className = 'd-block mt-3';
+    categoryTitle.innerText = category.toUpperCase().replace(/_/g, ' ');
+    tabsContent.appendChild(categoryTitle);
+
+    fields.forEach(field => {
+    const checkboxId = `tab-${field.column_name}`;
+
+    const checkboxWrapper = document.createElement('div');
+    checkboxWrapper.className = 'form-check';
+
+    checkboxWrapper.innerHTML = `
+    <input type="checkbox" name="selected_questions[${category}][]" 
+            value="${field.column_name}" 
+            id="${checkboxId}" 
+            class="form-check-input">
+    <label class="form-check-label" for="${checkboxId}">
+        ${field.question}
+    </label>
+    `;
+    tabsContent.appendChild(checkboxWrapper);
+    });
+    });
+
+    tabsContainer.style.display = 'block';
+    } else {
+    alert('Failed to load questions');
+    }
+    })
+    .catch(error => {
+    console.error(error);
+    alert('Error fetching template data.');
+    });
+    });
+    </script>
+    @endpush
+
 @endsection

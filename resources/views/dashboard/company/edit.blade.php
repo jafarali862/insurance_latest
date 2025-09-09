@@ -45,9 +45,7 @@
                         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
                         id="{{ $tabId }}" role="tabpanel" aria-labelledby="{{ $tabId }}-tab">
 
-                        {{-- Example required field for each tab --}}
                        
-
                         </div>
                         @endforeach
                         </div>

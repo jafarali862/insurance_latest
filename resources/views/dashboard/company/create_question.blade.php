@@ -40,6 +40,7 @@
 
                         <div class="form-group">
                             <label for="input_type">Input Type <span class="text-danger">*</span></label>
+                            
                             <select class="form-control" id="input_type" name="input_type" required>
                                 <option value="" disabled selected>Select Type</option>
                                 <option value="text">Text</option>

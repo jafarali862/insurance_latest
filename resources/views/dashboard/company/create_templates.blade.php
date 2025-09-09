@@ -22,106 +22,58 @@
       <div class="card-body">
 
         <!-- Template creation form -->
-            <form method="POST" action="{{ route('templates.store_templates') }}">
-            @csrf
+          <form method="POST" action="{{ route('templates.store_templates') }}">
+    @csrf
 
-            <div class="form-group mb-3">
-            <label for="company">Insurance Company:</label>
-            <select name="company_id" class="form-control" required>
-            @foreach($companies as $company)
-            <option value="{{ $company->id }}">{{ $company->name }}</option>
-            @endforeach
-            </select>
-            </div>
+<ul class="nav nav-tabs" id="questionTabs" role="tablist">
+    @foreach($questions as $category => $group)
+        <li class="nav-item">
+            <a class="nav-link {{ $loop->first ? 'active' : '' }}" 
+               id="{{ $category }}-tab" 
+               data-bs-toggle="tab" 
+               href="#{{ $category }}" 
+               role="tab">
+               {{ ucfirst(str_replace('_', ' ', $category)) }}
+            </a>
+        </li>
+    @endforeach
+</ul>
 
-            <!-- <div class="form-group mb-3">
-            <label for="category">Category:</label>
-            <select name="category" class="form-control" required>
-            <option value="driver">Driver</option>
-            <option value="garage">Garage</option>
-            <option value="spot">Spot</option>
-            <option value="accident">Accident</option>
-            </select>
-            </div> -->
+    <div class="tab-content mt-3">
+    @foreach($questions as $category => $group)
+    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" 
+    id="{{ $category }}" 
+    role="tabpanel">
 
-            <hr>
-
-            <h4>Fields (Dynamic)</h4>
-            <div id="fields-container" class="mb-3">
-            <div class="field-row d-flex gap-2 align-items-center mb-2">
-            <input type="text" name="fields[0][name]" class="form-control" placeholder="Field name" required>
-            <select name="fields[0][type]" class="form-control" required>
-            <option value="string">String</option>
-            <option value="integer">Integer</option>
-            <option value="boolean">Boolean</option>
-            <option value="text">Text</option>
-            <option value="json">JSON</option>
-            </select>
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeField(this)" title="Remove field">&times;</button>
-            </div>
-            </div>
-
-            <button type="button" class="btn btn-secondary mb-3" onclick="addField()">Add Another Field</button>
-            <br/>
-            <button type="submit" class="btn btn-primary mb-3">Create Template</button>
-            </form>
-
-      </div>
+    @foreach($group as $question)
+    <div class="form-check">
+    <input class="form-check-input" 
+    type="checkbox" 
+    name="questions[]" 
+    value="{{ $question->id }}" 
+    id="q{{ $question->id }}">
+    <label class="form-check-label" for="q{{ $question->id }}">
+    {{ $question->question }}
+    </label>
     </div>
-  </div>
-</div>
+    @endforeach
+
+    </div>
+    @endforeach
+    </div>
+
+    <br/>
+    <button type="submit" class="btn btn-primary mb-3">Create Template</button>
+    </form>
 
 
-<script>
-  let fieldIndex = 1;
-
-  function addField() {
-    const container = document.getElementById('fields-container');
-    const row = document.createElement('div');
-    row.classList.add('field-row', 'd-flex', 'gap-2', 'align-items-center', 'mb-2');
-    row.innerHTML = `
-      <input type="text" name="fields[${fieldIndex}][name]" class="form-control" placeholder="Field name" required>
-      <select name="fields[${fieldIndex}][type]" class="form-control" required>
-        <option value="string">String</option>
-        <option value="integer">Integer</option>
-        <option value="boolean">Boolean</option>
-        <option value="text">Text</option>
-        <option value="json">JSON</option>
-      </select>
-      <button type="button" class="btn btn-danger btn-sm" onclick="removeField(this)" title="Remove field">&times;</button>
-    `;
-    container.appendChild(row);
-    fieldIndex++;
-  }
-
-  function removeField(button) {
-    // Remove the parent .field-row div of the clicked remove button
-    const row = button.closest('.field-row');
-    if (row) {
-      row.remove();
-    }
-  }
-</script>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-   
+    </div>
+    </div>
+    </div>
+    </div>
 
 
 
-
-    <script>
-    document.getElementById('input_type').addEventListener('change', function () {
-        const fileTypeContainer = document.getElementById('fileTypeContainer');
-        if (this.value === 'file') {
-            fileTypeContainer.style.display = 'block';
-            document.getElementById('file_type').setAttribute('required', 'required');
-        } else {
-            fileTypeContainer.style.display = 'none';
-            document.getElementById('file_type').removeAttribute('required');
-        }
-    });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 @endsection

@@ -51,7 +51,8 @@
 
     <div class="card">
         <div class="card-body">
-            <table id="odometerTable" class="table table-bordered table-striped table-hover">
+          
+        <table id="odometerTable" class="table table-bordered table-striped table-hover">
                 <thead class="thead-dark text-center">
                     <tr>
                         <th>S.No</th>
@@ -63,9 +64,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($odometerRecords as $index => $record)
+                    @foreach ($odometerRecords as  $record)
                         <tr class="text-center">
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $record->user_name }}</td>
                             <td>{{ $record->check_in_time }}</td>
                             <td>
@@ -91,6 +92,10 @@
                     @endforeach
                 </tbody>
             </table>
+
+
+           
+
         </div>
     </div>
 </div>
@@ -103,23 +108,27 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('#odometerTable').DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "ordering": true,
-            "pageLength": 10,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            "language": {
-                "search": "Search all columns:",
-                "lengthMenu": "Show _MENU_ records per page",
-                "zeroRecords": "No matching records found",
-                "info": "Showing page _PAGE_ of _PAGES_",
-                "infoEmpty": "No records available",
-                "infoFiltered": "(filtered from _MAX_ total records)"
-            }
-        });
+   $(document).ready(function () {
+    $('#odometerTable').DataTable({
+        "paging": true,
+        "searching": true,
+        "info": true,
+        "ordering": true,
+        "responsive": true,
+        "autoWidth": false,
+        "pageLength": 10,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "language": {
+            "search": "Search all columns:",
+            "lengthMenu": "Show _MENU_ records per page",
+            "zeroRecords": "No matching records found",
+            "info": "Showing page _PAGE_ of _PAGES_",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+        }
     });
+});
+
 </script>
 
 <script>

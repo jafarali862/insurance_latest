@@ -8,7 +8,7 @@
     <button class="btn btn-danger mr-2" onclick="window.history.back()" title="Back">
     <i class="fas fa-arrow-left"></i>
     </button>
-    <button class="btn btn-warning mr-2" onclick="window.location.reload()" title="Reload">
+    <button class="btn btn-warning mr-2"  onclick="window.location.href='{{ route('request.report') }}'" title="Reload">
     <i class="fas fa-sync-alt"></i>
     </button>
 
@@ -17,11 +17,30 @@
     <div class="card card-primary card-outline shadow-sm">
     <div class="card-header">
     <h3 class="card-title mb-0" style="font-size: 32px;">Report Request List</h3>
+
+    <form method="GET" class="form-inline mb-3" id="filterForm" style="float: right;">
+    <div class="form-row align-items-end justify-content-end">
+    <div class="form-group mx-2">
+    <label for="from_date" class="mr-2">From:</label>
+    <input type="date" id="from_date" name="from_date" class="form-control"
+    value="{{ request()->from_date }}">
+    </div>
+
+    <div class="form-group mx-2">
+    <label for="to_date" class="mr-2">To:</label>
+    <input type="date" id="to_date" name="to_date" class="form-control"
+    value="{{ request()->to_date }}">
+    </div>
+
+    </div>
+    </form>
+
     </div>
 
 
 
         <div class="card-body">
+
             <table id="reportTable" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
@@ -54,6 +73,7 @@
                     @endforeach
                 </tbody>
             </table>
+            
         </div>
     </div>
 </div>
@@ -75,5 +95,14 @@
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         });
     });
+
+     document.getElementById('from_date').addEventListener('change', function () {
+        document.getElementById('filterForm').submit();
+    });
+
+    document.getElementById('to_date').addEventListener('change', function () {
+        document.getElementById('filterForm').submit();
+    });
+    
 </script>
 @endsection

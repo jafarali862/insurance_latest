@@ -16,4 +16,11 @@ class Question extends Model
         'unique_key',
          'file_type',
     ];
+
+    public function templates()
+    {
+    return $this->belongsToMany(Template::class, 'question_template');
+    }
+
+
 }

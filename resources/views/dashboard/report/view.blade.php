@@ -207,14 +207,27 @@
 
             <div class="col-md-4 mb-2">
 
-            @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
+            <!-- @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
             <div class="form-check mb-1">
             <input type="checkbox" class="form-check-input select-answer-checkbox-garage" name="selected_field[{{ $columnName }}]"
             value="{{ $garage->id }}" data-column="{{ $columnName }}" data-value="{{ $value }}"  data-case="{{ $report->case_id }}" id="{{ $radioId }}">
     
             Select this garage: 
-            <!-- <br><small>[{{ $garage->executive_name }}]</small> -->
-            <!-- </label> -->
+         
+            </div>
+            @endif -->
+
+
+             @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
+            <div class="form-check mb-1">
+            <input type="checkbox" class="form-check-input select-answer-checkbox-garage"
+            name="selected_field[{{ $columnName }}]"
+            value="{{ $garage->id }}"
+            data-column="{{ $columnName }}"
+            data-value="{{ $value }}"
+            data-case="{{ $report->case_id }}"
+            id="{{ $radioId }}"  style="border: 2px solid #5a10ff; width: 18px; height: 18px; accent-color: #5a10ff;">
+            Select this garage  
             </div>
             @endif
 
@@ -265,12 +278,22 @@
             @endif
 
 
-            <br><small>
-            @if (!empty($value) && strtolower(trim($value)) !== 'n/a')    
-            [{{ $garage->executive_name }}]
-             @endif
-           </small>
+            <br>
+
+            <small>
+            @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
+            <span style="color: #007bff; font-weight: bold;">
+            <i class="fas fa-user-tie me-1"></i> {{-- Font Awesome icon --}}
+            {{ $garage->executive_name }}
+            </span>
+            @endif
+            </small><br/>
+         {{ \Carbon\Carbon::parse($garage->updated_at)->format('d-m-Y h:i:s A') }}
+
+
+
             </label>
+
 
 
 
@@ -403,10 +426,14 @@
 
             @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
             <div class="form-check mb-1">
-            <input type="checkbox" class="form-check-input select-answer-checkbox-driver" name="selected_field[{{ $columnName }}]"
-            value="{{ $driver->id }}" data-column="{{ $columnName }}" data-value="{{ $value }}"  data-case="{{ $report->case_id }}" id="{{ $radioId }}">
-
-
+           
+            <input type="checkbox" class="form-check-input select-answer-checkbox-driver"
+            name="selected_field[{{ $columnName }}]"
+            value="{{ $driver->id }}"
+            data-column="{{ $columnName }}"
+            data-value="{{ $value }}"
+            data-case="{{ $report->case_id }}"
+            id="{{ $radioId }}"  style="border: 2px solid #5a10ff; width: 18px; height: 18px; accent-color: #5a10ff;">
             Select this driver: 
 
             </div>
@@ -594,9 +621,15 @@
 
 
             <div class="form-check mb-1">
-            <input type="checkbox" class="form-check-input select-answer-checkbox-spot" name="selected_field[{{ $columnName }}]"
-            value="{{ $spot->id }}" data-column="{{ $columnName }}" data-value="{{ $value }}"  data-case="{{ $report->case_id }}" id="{{ $radioId }}">
-
+           
+            <input type="checkbox" class="form-check-input select-answer-checkbox-spot"
+            name="selected_field[{{ $columnName }}]"
+            value="{{ $spot->id }}"
+            data-column="{{ $columnName }}"
+            data-value="{{ $value }}"
+            data-case="{{ $report->case_id }}"
+            id="{{ $radioId }}"  style="border: 2px solid #5a10ff; width: 18px; height: 18px; accent-color: #5a10ff;">
+            
             Select this spot: 
             </div>
             @endif
@@ -792,10 +825,17 @@
 
             <div class="col-md-4 mb-2">
               @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
-                <div class="form-check mb-1">
-            <input type="checkbox" class="form-check-input select-answer-checkbox-owner" name="selected_field[{{ $columnName }}]"
-            value="{{ $owner->id }}" data-column="{{ $columnName }}" data-value="{{ $value }}"  data-case="{{ $report->case_id }}" id="{{ $radioId }}">
 
+            <div class="form-check mb-1">
+          
+            <input type="checkbox" class="form-check-input select-answer-checkbox-owner"
+            name="selected_field[{{ $columnName }}]"
+            value="{{ $owner->id }}"
+            data-column="{{ $columnName }}"
+            data-value="{{ $value }}"
+            data-case="{{ $report->case_id }}"
+            id="{{ $radioId }}"  style="border: 2px solid #5a10ff; width: 18px; height: 18px; accent-color: #5a10ff;">
+            
             Select this owner: 
         
             </div>
@@ -1001,10 +1041,18 @@
 
                   @if (!empty($value) && strtolower(trim($value)) !== 'n/a')
                 <div class="form-check mb-1">
-            <input type="checkbox" class="form-check-input select-answer-checkbox-accident" name="selected_field[{{ $columnName }}]"
-            value="{{ $accident->id }}" data-column="{{ $columnName }}" data-value="{{ $value }}"  data-case="{{ $report->case_id }}" id="{{ $radioId }}">
-
-
+           
+            <!-- <input type="checkbox" class="form-check-input select-answer-checkbox-accident" name="selected_field[{{ $columnName }}]"
+            value="{{ $accident->id }}" data-column="{{ $columnName }}" data-value="{{ $value }}"  data-case="{{ $report->case_id }}" id="{{ $radioId }}" style="border: 2px solid #5a10ff; width: 18px; height: 18px; accent-color: #5a10ff;"> -->
+            
+            <input type="checkbox" class="form-check-input select-answer-checkbox-accident"
+            name="selected_field[{{ $columnName }}]"
+            value="{{ $accident->id }}"
+            data-column="{{ $columnName }}"
+            data-value="{{ $value }}"
+            data-case="{{ $report->case_id }}"
+            id="{{ $radioId }}"  style="border: 2px solid #5a10ff; width: 18px; height: 18px; accent-color: #5a10ff;">
+      
             Select this accident: 
     
             </div>
@@ -1385,187 +1433,165 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-$('input.select-answer-checkbox-garage').on('change', function () {
+    $('input.select-answer-checkbox-garage').on('change', function () {
     const columnName = $(this).data('column');
     const value = $(this).data('value');
     const caseId = $(this).data('case');
 
-    const isConfirmed = confirm('Are you sure you want to proceed to report with this garage?');
-
-    if (!isConfirmed) {
-        // Uncheck the radio if user cancels
-        $(this).prop('checked', false);
-        return;
+    // Highlight checkbox when checked
+    if ($(this).is(':checked')) {
+    $(this).closest('.form-check').addClass('bg-success text-white'); // green background
+    } else {
+    $(this).closest('.form-check').removeClass('bg-success text-white');
     }
 
-    // User confirmed; proceed with AJAX call
+    // AJAX call to update database
     $.ajax({
-        url: "{{ route('save.selected') }}",
-        method: 'POST',
-        data: {
-            column_name: columnName,
-            value: value,
-            case_id: caseId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function (response) {
-            console.log('Answer updated:', response.data.message);
-
-            // Call your "report" function here if needed:
-            // submitReportFunction(); or redirect, etc.
-        },
-        error: function (xhr, status, error) {
-            alert('Error updating answer: ' + error);
-        }
+    url: "{{ route('save.selected') }}",
+    method: 'POST',
+    data: {
+    column_name: columnName,
+    value: value,
+    case_id: caseId,
+    _token: '{{ csrf_token() }}'
+    },
+    success: function (response) {
+    console.log('Answer updated:', response.data.message);
+    },
+    error: function (xhr, status, error) {
+    console.error('Error updating answer:', error);
+    }
     });
-});
+    });
 
+   
 
-
-$('input.select-answer-checkbox-driver').on('change', function () {
+    $('input.select-answer-checkbox-driver').on('change', function () {
     const columnName = $(this).data('column');
     const value = $(this).data('value');
     const caseId = $(this).data('case');
 
-    const isConfirmed = confirm('Are you sure you want to proceed to report with this driver?');
-
-    if (!isConfirmed) {
-        // Uncheck the radio if user cancels
-        $(this).prop('checked', false);
-        return;
+    // Highlight checkbox when checked
+    if ($(this).is(':checked')) {
+    $(this).closest('.form-check').addClass('bg-success text-white'); // green background
+    } else {
+    $(this).closest('.form-check').removeClass('bg-success text-white');
     }
 
-    // User confirmed; proceed with AJAX call
+    // AJAX call to update database
     $.ajax({
-        url: "{{ route('save.selected') }}",
-        method: 'POST',
-        data: {
-            column_name: columnName,
-            value: value,
-            case_id: caseId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function (response) {
-            console.log('Answer updated:', response.data.message);
-
-            // Call your "report" function here if needed:
-            // submitReportFunction(); or redirect, etc.
-        },
-        error: function (xhr, status, error) {
-            alert('Error updating answer: ' + error);
-        }
+    url: "{{ route('save.selected') }}",
+    method: 'POST',
+    data: {
+    column_name: columnName,
+    value: value,
+    case_id: caseId,
+    _token: '{{ csrf_token() }}'
+    },
+    success: function (response) {
+    console.log('Answer updated:', response.data.message);
+    },
+    error: function (xhr, status, error) {
+    console.error('Error updating answer:', error);
+    }
     });
-});
+    });
 
 
-
-$('input.select-answer-checkbox-spot').on('change', function () {
+    $('input.select-answer-checkbox-spot').on('change', function () {
     const columnName = $(this).data('column');
     const value = $(this).data('value');
     const caseId = $(this).data('case');
 
-    const isConfirmed = confirm('Are you sure you want to proceed to report with this spot?');
-
-    if (!isConfirmed) {
-        // Uncheck the radio if user cancels
-        $(this).prop('checked', false);
-        return;
+    // Highlight checkbox when checked
+    if ($(this).is(':checked')) {
+    $(this).closest('.form-check').addClass('bg-success text-white'); // green background
+    } else {
+    $(this).closest('.form-check').removeClass('bg-success text-white');
     }
 
-    // User confirmed; proceed with AJAX call
+    // AJAX call to update database
     $.ajax({
-        url: "{{ route('save.selected') }}",
-        method: 'POST',
-        data: {
-            column_name: columnName,
-            value: value,
-            case_id: caseId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function (response) {
-            console.log('Answer updated:', response.data.message);
-
-            // Call your "report" function here if needed:
-            // submitReportFunction(); or redirect, etc.
-        },
-        error: function (xhr, status, error) {
-            alert('Error updating answer: ' + error);
-        }
+    url: "{{ route('save.selected') }}",
+    method: 'POST',
+    data: {
+    column_name: columnName,
+    value: value,
+    case_id: caseId,
+    _token: '{{ csrf_token() }}'
+    },
+    success: function (response) {
+    console.log('Answer updated:', response.data.message);
+    },
+    error: function (xhr, status, error) {
+    console.error('Error updating answer:', error);
+    }
     });
-});
+    });
 
 
-$('input.select-answer-checkbox-owner').on('change', function () {
+    $('input.select-answer-checkbox-owner').on('change', function () {
     const columnName = $(this).data('column');
     const value = $(this).data('value');
     const caseId = $(this).data('case');
 
-    const isConfirmed = confirm('Are you sure you want to proceed to report with this owner?');
-
-    if (!isConfirmed) {
-        // Uncheck the radio if user cancels
-        $(this).prop('checked', false);
-        return;
+    // Highlight checkbox when checked
+    if ($(this).is(':checked')) {
+    $(this).closest('.form-check').addClass('bg-success text-white'); // green background
+    } else {
+    $(this).closest('.form-check').removeClass('bg-success text-white');
     }
 
-    // User confirmed; proceed with AJAX call
+    // AJAX call to update database
     $.ajax({
-        url: "{{ route('save.selected') }}",
-        method: 'POST',
-        data: {
-            column_name: columnName,
-            value: value,
-            case_id: caseId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function (response) {
-            console.log('Answer updated:', response.data.message);
-
-            // Call your "report" function here if needed:
-            // submitReportFunction(); or redirect, etc.
-        },
-        error: function (xhr, status, error) {
-            alert('Error updating answer: ' + error);
-        }
+    url: "{{ route('save.selected') }}",
+    method: 'POST',
+    data: {
+    column_name: columnName,
+    value: value,
+    case_id: caseId,
+    _token: '{{ csrf_token() }}'
+    },
+    success: function (response) {
+    console.log('Answer updated:', response.data.message);
+    },
+    error: function (xhr, status, error) {
+    console.error('Error updating answer:', error);
+    }
     });
-});
+    });
 
 
-
-$('input.select-answer-checkbox-accident').on('change', function () {
+     $('input.select-answer-checkbox-accident').on('change', function () {
     const columnName = $(this).data('column');
     const value = $(this).data('value');
     const caseId = $(this).data('case');
 
-    const isConfirmed = confirm('Are you sure you want to proceed to report with this accident?');
-
-    if (!isConfirmed) {
-        // Uncheck the radio if user cancels
-        $(this).prop('checked', false);
-        return;
+    // Highlight checkbox when checked
+    if ($(this).is(':checked')) {
+    $(this).closest('.form-check').addClass('bg-success text-white'); // green background
+    } else {
+    $(this).closest('.form-check').removeClass('bg-success text-white');
     }
 
-    // User confirmed; proceed with AJAX call
+    // AJAX call to update database
     $.ajax({
-        url: "{{ route('save.selected') }}",
-        method: 'POST',
-        data: {
-            column_name: columnName,
-            value: value,
-            case_id: caseId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function (response) {
-            console.log('Answer updated:', response.data.message);
-
-            // Call your "report" function here if needed:
-            // submitReportFunction(); or redirect, etc.
-        },
-        error: function (xhr, status, error) {
-            alert('Error updating answer: ' + error);
-        }
+    url: "{{ route('save.selected') }}",
+    method: 'POST',
+    data: {
+    column_name: columnName,
+    value: value,
+    case_id: caseId,
+    _token: '{{ csrf_token() }}'
+    },
+    success: function (response) {
+    console.log('Answer updated:', response.data.message);
+    },
+    error: function (xhr, status, error) {
+    console.error('Error updating answer:', error);
+    }
     });
-});
+    });
 
 
 </script>

@@ -26,13 +26,16 @@
 
                         <div class="form-group">
                             <label for="input_type">Input Type <span class="text-danger">*</span></label>
-                            <select class="form-control" id="input_type" name="input_type" required>
-                                @foreach(['text', 'textarea', 'select', 'file', 'date'] as $type)
-                                    <option value="{{ $type }}" {{ old('input_type', $question->input_type) == $type ? 'selected' : '' }}>
-                                        {{ ucfirst($type) }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <select class="form-control" id="input_type" name="input_type">
+    <!-- <option value="" disabled {{ old('input_type', $question->input_type ?? '') == '' ? 'selected' : '' }}>
+        -- Select Input Type --
+    </option> -->
+    <option value="{{ $question->input_type }}" selected disabled>
+        {{ ucfirst($question->input_type) }}
+    </option>
+
+</select>
+
                             <small id="input_type-error" class="text-danger"></small>
                         </div>
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 04, 2025 at 11:37 AM
+-- Generation Time: Sep 09, 2025 at 06:26 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,6 +33,7 @@ CREATE TABLE `accident_person_data` (
   `executive_id` bigint(20) UNSIGNED DEFAULT NULL,
   `upload_photos_of_the_vehicle_damage` varchar(255) DEFAULT NULL,
   `was_anyone_injured_in_the_accident` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -81,10 +82,9 @@ CREATE TABLE `assign_work_data` (
 --
 
 INSERT INTO `assign_work_data` (`id`, `case_id`, `garage_reassign_status`, `garage_re_assign_count`, `driver_reassign_status`, `driver_re_assign_count`, `spot_reassign_status`, `spot_re_assign_count`, `owner_reassign_status`, `owner_re_assign_count`, `accident_person_reassign_status`, `accident_person_re_assign_count`, `created_at`, `updated_at`) VALUES
-(1, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, '2025-09-02 09:04:40', '2025-09-02 09:04:40'),
-(2, 3, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, '2025-09-04 08:53:34', '2025-09-04 08:53:34'),
-(3, 4, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, '2025-09-04 08:53:35', '2025-09-04 08:53:35'),
-(4, 5, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, '2025-09-04 09:03:18', '2025-09-04 09:03:18');
+(1, 1, '1', 3, '1', 3, NULL, 0, NULL, 0, NULL, 0, '2025-09-08 04:15:14', '2025-09-08 04:33:15'),
+(2, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, '2025-09-08 04:26:16', '2025-09-08 04:26:16'),
+(3, 3, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, '2025-09-08 04:26:17', '2025-09-08 04:26:17');
 
 -- --------------------------------------------------------
 
@@ -119,11 +119,9 @@ CREATE TABLE `case_assignments` (
 --
 
 INSERT INTO `case_assignments` (`id`, `case_id`, `company_id`, `customer_id`, `executive_driver`, `executive_garage`, `executive_spot`, `executive_meeting`, `executive_accident_person`, `date`, `type`, `other`, `status`, `case_status`, `is_fake`, `create_by`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 20, 1, 12, 12, 12, 12, NULL, '2025-09-21', 'OD', NULL, '2', '1', NULL, '1', '1', '2025-09-02 01:25:51', '2025-09-02 01:25:51'),
-(2, 1, 1, 1, 12, 12, 12, 12, NULL, '2025-09-30', 'OD', NULL, '2', '1', NULL, '1', '1', '2025-08-26 09:04:40', '2025-09-02 09:04:40'),
-(3, 1, 1, 1, 12, 12, 12, 2, NULL, '2025-09-08', 'OD', 'ggggggggggg', '1', '1', NULL, '1', '1', '2025-09-01 08:53:34', '2025-09-01 08:53:34'),
-(4, 1, 1, 1, 12, 12, 12, 2, NULL, '2025-09-08', 'OD', 'ggggggggggg', '1', '1', NULL, '1', '1', '2025-09-02 08:53:35', '2025-09-02 08:53:35'),
-(5, 4, 1, 2, 12, 12, 12, 12, NULL, '2025-09-08', 'OD', NULL, '1', '1', NULL, '1', '1', '2025-09-04 09:03:18', '2025-09-07 09:03:18');
+(1, 1, 2, 1, 12, 12, 12, 12, NULL, '2025-09-15', 'OD', NULL, '2', '1', NULL, '1', '1', '2025-09-08 04:15:14', '2025-09-08 04:31:56'),
+(2, 1, 2, 1, 12, 12, 12, 12, NULL, '2025-09-15', 'OD', 'ssssssssssss', '1', '1', NULL, '1', '1', '2025-09-08 04:26:16', '2025-09-08 04:26:16'),
+(3, 1, 2, 1, 12, 12, 12, 12, NULL, '2025-09-15', 'OD', 'ssssssssssss', '1', '1', NULL, '1', '1', '2025-09-08 04:26:17', '2025-09-08 04:26:17');
 
 -- --------------------------------------------------------
 
@@ -165,6 +163,7 @@ CREATE TABLE `driver_data` (
   `was_the_driver_under_influence` varchar(255) DEFAULT NULL,
   `did_the_driver_receive_any_injuries` varchar(255) DEFAULT NULL,
   `list_any_previous_driving_offenses` varchar(255) DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -173,15 +172,10 @@ CREATE TABLE `driver_data` (
 -- Dumping data for table `driver_data`
 --
 
-INSERT INTO `driver_data` (`id`, `assign_work_id`, `executive_id`, `full_name_of_the_driver_at_the_time_of_the_accident`, `what_is_the_drivers_contact_number`, `was_the_driver_under_influence`, `did_the_driver_receive_any_injuries`, `list_any_previous_driving_offenses`, `created_at`, `updated_at`) VALUES
-(1, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 01:35:01', '2025-09-02 01:35:01'),
-(2, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 07:13:25', '2025-09-02 07:13:25'),
-(3, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 07:27:43', '2025-09-02 07:27:43'),
-(4, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 09:07:58', '2025-09-02 09:07:58'),
-(5, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 09:10:32', '2025-09-02 09:10:32'),
-(6, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(7, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(8, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
+INSERT INTO `driver_data` (`id`, `assign_work_id`, `executive_id`, `full_name_of_the_driver_at_the_time_of_the_accident`, `what_is_the_drivers_contact_number`, `was_the_driver_under_influence`, `did_the_driver_receive_any_injuries`, `list_any_previous_driving_offenses`, `location`, `created_at`, `updated_at`) VALUES
+(1, 1, 11, NULL, '9961245588', NULL, NULL, NULL, NULL, '2025-09-08 04:22:45', '2025-09-08 04:22:45'),
+(2, 1, 11, NULL, '9961245588', NULL, NULL, NULL, NULL, '2025-09-08 04:26:46', '2025-09-08 04:26:46'),
+(3, 1, 11, NULL, '9961245588', NULL, NULL, NULL, NULL, '2025-09-08 04:33:15', '2025-09-08 04:33:15');
 
 -- --------------------------------------------------------
 
@@ -207,14 +201,9 @@ CREATE TABLE `driver_data_old` (
 --
 
 INSERT INTO `driver_data_old` (`id`, `assign_work_id`, `executive_id`, `full_name_of_the_driver_at_the_time_of_the_accident`, `what_is_the_drivers_contact_number`, `was_the_driver_under_influence`, `did_the_driver_receive_any_injuries`, `list_any_previous_driving_offenses`, `created_at`, `updated_at`) VALUES
-(1, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 01:35:01', '2025-09-02 01:35:01'),
-(2, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 07:13:25', '2025-09-02 07:13:25'),
-(3, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 07:27:43', '2025-09-02 07:27:43'),
-(4, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 09:07:58', '2025-09-02 09:07:58'),
-(5, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 09:10:32', '2025-09-02 09:10:32'),
-(6, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(7, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(8, 1, 12, NULL, '9961242776', NULL, NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
+(1, 1, 11, NULL, '9961245588', NULL, NULL, NULL, '2025-09-08 04:22:45', '2025-09-08 04:22:45'),
+(2, 1, 11, NULL, '9961245588', NULL, NULL, NULL, '2025-09-08 04:26:46', '2025-09-08 04:26:46'),
+(3, 1, 11, NULL, '9961245588', NULL, NULL, NULL, '2025-09-08 04:33:15', '2025-09-08 04:33:15');
 
 -- --------------------------------------------------------
 
@@ -253,7 +242,7 @@ CREATE TABLE `final_reports` (
 --
 
 INSERT INTO `final_reports` (`id`, `case_id`, `what_is_the_name_of_the_garage`, `upload_a_photo_of_the_garage_sign_or_front_view`, `enter_the_address_or_coordinates_of_the_accident_spot`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Garage786', '[\"garage_uploads\\/7VTkaPBuZnr2FjCHiBYkrmKPVOJx5ZO0brRNm7uy.jpg\"]', 'Spot44', '2025-09-02 10:03:42', '2025-09-02 10:34:03');
+(1, 1, 'Garage 345', NULL, NULL, '2025-09-08 04:57:25', '2025-09-08 05:06:27');
 
 -- --------------------------------------------------------
 
@@ -277,7 +266,7 @@ CREATE TABLE `final_reports_new` (
 --
 
 INSERT INTO `final_reports_new` (`id`, `case_id`, `what_is_the_name_of_the_garage`, `upload_a_photo_of_the_garage_sign_or_front_view`, `date_of_the_meeting`, `enter_the_address_or_coordinates_of_the_accident_spot`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Garage786', '[\"garage_uploads\\/7VTkaPBuZnr2FjCHiBYkrmKPVOJx5ZO0brRNm7uy.jpg\"]', NULL, 'Spot44', '2025-09-02 09:53:57', '2025-09-02 10:34:03');
+(1, 1, 'Garage 345', NULL, NULL, NULL, '2025-09-08 04:57:25', '2025-09-08 05:06:27');
 
 -- --------------------------------------------------------
 
@@ -292,19 +281,22 @@ CREATE TABLE `garage_data` (
   `what_is_the_name_of_the_garage` varchar(255) DEFAULT NULL,
   `upload_a_photo_of_the_garage_sign_or_front_view` varchar(255) DEFAULT NULL,
   `what_is_the_garages_registration_number` varchar(255) DEFAULT NULL,
-  `what_is_garage_id` varchar(255) DEFAULT NULL,
+  `what_is_garage_car` varchar(255) DEFAULT 'NULL',
+  `location` varchar(255) DEFAULT NULL,
+  `sp_case` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `questions_45` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `garage_data`
 --
 
-INSERT INTO `garage_data` (`id`, `assign_work_id`, `executive_id`, `what_is_the_name_of_the_garage`, `upload_a_photo_of_the_garage_sign_or_front_view`, `what_is_the_garages_registration_number`, `what_is_garage_id`, `created_at`, `updated_at`) VALUES
-(6, 1, 12, 'Garage786', 'garage_uploads/7VTkaPBuZnr2FjCHiBYkrmKPVOJx5ZO0brRNm7uy.jpg', NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 10:04:10'),
-(7, 1, 12, 'Garage786', 'uploads/zhjn6hCrav3vQOY6LitVLVh9f4B358SifFpX4Vum.png', NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(8, 1, 12, 'Garage786', 'uploads/zhjn6hCrav3vQOY6LitVLVh9f4B358SifFpX4Vum.png', NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
+INSERT INTO `garage_data` (`id`, `assign_work_id`, `executive_id`, `what_is_the_name_of_the_garage`, `upload_a_photo_of_the_garage_sign_or_front_view`, `what_is_the_garages_registration_number`, `what_is_garage_car`, `location`, `sp_case`, `created_at`, `updated_at`, `questions_45`) VALUES
+(1, 1, 12, 'Garage 345', 'garage_uploads/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg', NULL, 'NULL', NULL, NULL, '2025-09-08 04:22:45', '2025-09-08 04:31:56', NULL),
+(2, 1, 12, 'Garage 345', 'garage_uploads/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg', NULL, 'NULL', NULL, NULL, '2025-09-08 04:26:46', '2025-09-08 04:31:56', NULL),
+(3, 1, 12, 'Garage 345', 'garage_uploads/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg', NULL, 'NULL', NULL, NULL, '2025-09-08 04:33:15', '2025-09-08 04:33:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -321,17 +313,18 @@ CREATE TABLE `garage_data_old` (
   `what_is_the_garages_registration_number` varchar(255) DEFAULT NULL,
   `what_is_garage_id` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `questions_45` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `garage_data_old`
 --
 
-INSERT INTO `garage_data_old` (`id`, `assign_work_id`, `executive_id`, `what_is_the_name_of_the_garage`, `upload_a_photo_of_the_garage_sign_or_front_view`, `what_is_the_garages_registration_number`, `what_is_garage_id`, `created_at`, `updated_at`) VALUES
-(6, 1, 12, 'Garage786', NULL, NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(7, 1, 12, 'Garage786', 'uploads/zhjn6hCrav3vQOY6LitVLVh9f4B358SifFpX4Vum.png', NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(8, 1, 12, 'Garage786', 'uploads/zhjn6hCrav3vQOY6LitVLVh9f4B358SifFpX4Vum.png', NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
+INSERT INTO `garage_data_old` (`id`, `assign_work_id`, `executive_id`, `what_is_the_name_of_the_garage`, `upload_a_photo_of_the_garage_sign_or_front_view`, `what_is_the_garages_registration_number`, `what_is_garage_id`, `created_at`, `updated_at`, `questions_45`) VALUES
+(1, 1, 11, 'Garage 345', 'garage_uploads/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg', NULL, NULL, '2025-09-08 04:22:45', '2025-09-08 04:22:45', NULL),
+(2, 1, 11, 'Garage 345', 'garage_uploads/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg', NULL, NULL, '2025-09-08 04:26:46', '2025-09-08 04:26:46', NULL),
+(3, 1, 11, 'Garage 345', 'garage_uploads/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg', NULL, NULL, '2025-09-08 04:33:15', '2025-09-08 04:33:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -360,10 +353,7 @@ CREATE TABLE `insurance_cases` (
 --
 
 INSERT INTO `insurance_cases` (`id`, `company_id`, `customer_id`, `insurance_type`, `case_details`, `status`, `status_new`, `assigned_status`, `case_status`, `create_by`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'MAC', 'case44', '1', 0, '1', '2', '1', '1', '2025-09-02 09:04:40', '2025-09-04 08:53:34'),
-(2, 1, 1, 'MAC', 'case44', '1', 0, '1', '2', '1', '1', '2025-08-30 06:35:33', '2025-09-04 08:53:34'),
-(3, 1, 1, 'MAC', 'fffffff', '1', 0, '1', '2', '1', '1', '2025-08-29 06:37:13', '2025-09-04 08:53:34'),
-(4, 1, 2, 'single', 'case descriptions.........', '1', 0, '1', '1', '1', '1', '2025-09-04 09:03:18', '2025-09-04 09:03:18');
+(1, 2, 1, 'single', 'case details descriptions..........', '1', 0, '1', '2', '1', '1', '2025-09-08 04:15:14', '2025-09-08 04:26:16');
 
 -- --------------------------------------------------------
 
@@ -393,7 +383,9 @@ CREATE TABLE `insurance_companies` (
 --
 
 INSERT INTO `insurance_companies` (`id`, `name`, `contact_person`, `email`, `phone`, `address`, `template`, `status`, `selected_tabs`, `questionnaires`, `create_by`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 'Test company', 'Hassan', 'testcompany@gmail.com', '9876543210', 'adress44', 1, '1', '[\"garage\",\"driver\",\"spot\",\"meeting\"]', '{\"garage\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"label\":\"What Is The Name Of The Garage\",\"type\":\"text\",\"required\":false}},\"driver\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"label\":\"What Is The Drivers Contact Number\",\"type\":\"text\",\"required\":false}},\"spot\":{\"enter_the_address_or_coordinates_of_the_accident_spot\":{\"name\":\"enter_the_address_or_coordinates_of_the_accident_spot\",\"label\":\"Enter The Address Or Coordinates Of The Accident Spot\",\"type\":\"text\",\"required\":false}},\"meeting\":{\"date_of_the_meeting\":{\"name\":\"date_of_the_meeting\",\"label\":\"Date Of The Meeting\",\"type\":\"date\",\"required\":false}}}', '1', '1', '2025-09-02 09:03:05', '2025-09-02 09:03:05');
+(1, 'Test company', 'Ravi Nair', 'test@gmail.com', '9876543210', 'fffffffffffffsd', 1, '1', '[\"garage\",\"driver\",\"spot\",\"meeting\",\"accident\"]', '{\"garage\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"label\":\"What Is The Name Of The Garage\",\"type\":\"text\",\"required\":false}},\"driver\":{\"full_name_of_the_driver_at_the_time_of_the_accident\":{\"name\":\"full_name_of_the_driver_at_the_time_of_the_accident\",\"label\":\"Full Name Of The Driver At The Time Of The Accident\",\"type\":\"text\",\"required\":false}},\"spot\":{\"were_any_traffic_signals_nearby\":{\"name\":\"were_any_traffic_signals_nearby\",\"label\":\"Were Any Traffic Signals Nearby\",\"type\":\"select\",\"required\":false,\"options\":[{\"label\":\"Yes\",\"value\":1},{\"label\":\"No\",\"value\":0},{\"label\":\"Other\",\"value\":2}]}},\"meeting\":{\"what_was_discussed_in_the_meeting\":{\"name\":\"what_was_discussed_in_the_meeting\",\"label\":\"What Was Discussed In The Meeting\",\"type\":\"text\",\"required\":false}},\"accident\":{\"upload_photos_of_the_vehicle_damage\":{\"name\":\"upload_photos_of_the_vehicle_damage\",\"label\":\"Upload Photos Of The Vehicle Damage\",\"type\":\"file\",\"required\":false,\"file_type\":\"image\"}}}', '1', '1', '2025-09-06 10:54:50', '2025-09-06 10:54:50'),
+(2, 'Keltron', 'Ravi Nair', 'rvi@gmail.com', '9497626144', 'adreees11', 1, '1', '[\"garage\",\"driver\"]', '{\"garage\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"label\":\"What Is The Name Of The Garage\",\"type\":\"text\",\"required\":false},\"upload_a_photo_of_the_garage_sign_or_front_view\":{\"name\":\"upload_a_photo_of_the_garage_sign_or_front_view\",\"label\":\"Upload A Photo Of The Garage Sign Or Front View\",\"type\":\"file\",\"required\":false,\"file_type\":\"image\"}},\"driver\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"label\":\"What Is The Drivers Contact Number\",\"type\":\"text\",\"required\":false}}}', '1', '1', '2025-09-08 04:08:21', '2025-09-08 04:08:21'),
+(3, 'testee', 'Ravi Nair', 'veena123@gmail.com', '9497626111', 'ffffffffffd', 1, '1', '\"[\\\"garage\\\",\\\"driver\\\",\\\"spot\\\",\\\"meeting\\\",\\\"accident\\\"]\"', '\"{\\\"garage\\\":{\\\"upload_a_photo_of_the_garage_sign_or_front_view\\\":{\\\"name\\\":\\\"upload_a_photo_of_the_garage_sign_or_front_view\\\",\\\"label\\\":\\\"Upload A Photo Of The Garage Sign Or Front View\\\",\\\"type\\\":\\\"file\\\",\\\"required\\\":false,\\\"file_type\\\":\\\"image\\\"}},\\\"driver\\\":{\\\"was_the_driver_under_influence\\\":{\\\"name\\\":\\\"was_the_driver_under_influence\\\",\\\"label\\\":\\\"Was The Driver Under Influence\\\",\\\"type\\\":\\\"select\\\",\\\"required\\\":false,\\\"options\\\":[{\\\"label\\\":\\\"Yes\\\",\\\"value\\\":1},{\\\"label\\\":\\\"No\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Other\\\",\\\"value\\\":2}]}},\\\"spot\\\":{\\\"were_any_traffic_signals_nearby\\\":{\\\"name\\\":\\\"were_any_traffic_signals_nearby\\\",\\\"label\\\":\\\"Were Any Traffic Signals Nearby\\\",\\\"type\\\":\\\"select\\\",\\\"required\\\":false,\\\"options\\\":[{\\\"label\\\":\\\"Yes\\\",\\\"value\\\":1},{\\\"label\\\":\\\"No\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Other\\\",\\\"value\\\":2}]}},\\\"meeting\\\":{\\\"date_of_the_meeting\\\":{\\\"name\\\":\\\"date_of_the_meeting\\\",\\\"label\\\":\\\"Date Of The Meeting\\\",\\\"type\\\":\\\"date\\\",\\\"required\\\":false}},\\\"accident\\\":{\\\"upload_photos_of_the_vehicle_damage\\\":{\\\"name\\\":\\\"upload_photos_of_the_vehicle_damage\\\",\\\"label\\\":\\\"Upload Photos Of The Vehicle Damage\\\",\\\"type\\\":\\\"file\\\",\\\"required\\\":false,\\\"file_type\\\":\\\"image\\\"}}}\"', '1', '1', '2025-09-08 10:52:22', '2025-09-08 10:52:22');
 
 -- --------------------------------------------------------
 
@@ -430,8 +422,7 @@ CREATE TABLE `insurance_customers` (
 --
 
 INSERT INTO `insurance_customers` (`id`, `company_id`, `name`, `father_name`, `phone`, `emergency_contact_number`, `email`, `present_address`, `permanent_address`, `policy_no`, `policy_start`, `policy_end`, `insurance_type`, `intimation_report`, `crime_number`, `police_station`, `status`, `create_by`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Jafar', 'Ahammed', '9656523476', '9656523476', 'jaf@gmail.com', 'fffffffsd', 'fffffffsd', '123456', '2025-08-05', '2025-08-12', 'OD', 'uploads/intimation_reports/1756803880_permitfromlsgd_71_1756440667.pdf', '33332244', 'mlpm', '1', '1', '1', '2025-09-02 09:04:40', '2025-09-02 09:04:40'),
-(2, 1, 'Case555', 'ffffffffffs', '9497626177', '9497626177', 'case44@gmail.com', 'fffffffffffffs', 'fffffffffffffs', '3451235', '2025-09-01', '2025-09-30', 'OD', 'uploads/intimation_reports/1756976598_17108748052646.jpg', '3333224X', 'mlpm', '1', '1', '1', '2025-09-04 09:03:18', '2025-09-04 09:03:18');
+(1, 2, 'Hassan', 'Abdu Rahman', '9656523123', '9656523123', 'hs@gmail.com', 'kkd', 'kkd', '3451235', '2025-09-08', '2025-09-15', 'OD', 'uploads/intimation_reports/1757304913_permitfromlsgd_71_1756440667.pdf', '123XRT', 'tirur', '1', '1', '1', '2025-09-08 04:15:14', '2025-09-08 04:15:14');
 
 -- --------------------------------------------------------
 
@@ -504,7 +495,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 ('04e749d5af27c099be44f44e0e21aab20c91effc63ec35241632fc27a294528d6b7c8425c88da2da', 29, 1, 'Insurance API Auth', '[]', 0, '2025-07-14 01:54:41', '2025-07-14 01:54:41', '2026-07-14 07:24:41'),
 ('31e7c2f7808c0405ff9bdbfa80b3a0fdcec5ed997b057ab2a4decdf07ea07ddebb5a2473433b4742', 26, 1, 'Insurance API Auth', '[]', 0, '2025-03-13 00:34:08', '2025-03-13 00:34:08', '2026-03-13 06:04:08'),
 ('3a1c2a0548103e9b574221881c849b96b01455afe16281fc1f94d314a9723253c6a0670fcec3f2b8', 2, 1, 'Insurance API Auth', '[]', 0, '2025-07-16 03:53:08', '2025-07-16 03:53:08', '2026-07-16 09:23:08'),
-('3d8ebc2bdc5bb6b891441bdf487c6e27c05427f4baf2551bef0433379688a91e82c89505fd79e4b0', 12, 1, 'Insurance API Auth', '[]', 0, '2025-09-03 07:53:15', '2025-09-03 07:53:16', '2026-09-03 13:23:15'),
+('4cc134dfc7b886d61675c959fab779a7f48990ffba1057620cc016ab031123f020cdd23a25f5f1f7', 12, 1, 'Insurance API Auth', '[]', 0, '2025-09-08 04:10:00', '2025-09-08 04:10:01', '2026-09-08 09:40:00'),
 ('5015c9da4a709737d6c3df638aaff44d4eda33855bc4cc45e6824899cad0e699e05ffb24716b2d7b', 5, 1, 'Insurance API Auth', '[]', 0, '2025-01-26 23:03:48', '2025-01-26 23:03:48', '2026-01-27 04:33:48'),
 ('566fb9e583265b69aa1f282b99b91c0a37eebca15b74e065fdf95ac1eace366b84c826eb51b6c5c2', 27, 1, 'Insurance API Auth', '[]', 0, '2025-06-04 02:03:50', '2025-06-04 02:03:51', '2026-06-04 07:33:50'),
 ('6fa88dfbe68d016a302d044045c244999008ee44baf5f331e33b74c8c818ca4f2ff46424339b4553', 9, 1, 'Insurance API Auth', '[]', 0, '2024-10-22 06:17:24', '2024-10-22 06:17:24', '2025-10-22 11:47:24'),
@@ -660,16 +651,13 @@ INSERT INTO `odometer_readings` (`id`, `user_id`, `check_in_km`, `check_in_image
 (35, 18, '11', 'odometer/rrFVE2LVXyUoWgZnJQvKq0RW16d8iosvstHaVJZ5.jpg', '12:35 PM', '06-01-2025', '11.180775, 75.8545333', NULL, NULL, NULL, NULL, NULL, '0', '2025-01-06 07:05:31', '2025-01-06 07:05:31'),
 (36, 18, NULL, 'odometer/hExF7E0lt7FOUxpyfacMFwnxU2tx6SzY0MJi6JQn.png', '12:45 PM', '06-01-2025', '12,12', NULL, NULL, NULL, NULL, NULL, '0', '2025-01-06 07:15:31', '2025-01-06 07:15:31'),
 (37, 18, '1234', 'odometer/4DEZKTDsJCKZQyxWGJdnojru8D60kvrXGUk07WQA.jpg', '10:20 AM', '07-01-2025', '11.180775, 75.8545333', NULL, NULL, NULL, NULL, NULL, '0', '2025-01-07 04:50:12', '2025-01-07 04:50:12'),
-(38, 4, '81274', 'odometer/suQyE6FqhzZFzncnCPXSK2N7nEalqeqjjy7nfM72.jpg', '01:48 PM', '24-01-2025', '8.5061004, 76.9534973', NULL, NULL, NULL, NULL, NULL, '0', '2025-01-24 08:18:00', '2025-01-24 08:18:00'),
-(39, 4, '81274', 'odometer/MxPnMm4lJ05KlNAf3Kr65PKjOFrGpc4HISkhAz1y.jpg', '01:49 PM', '24-01-2025', '8.5060865, 76.9535059', '81350', 'odometer/ZqA6b77xViTVf9IENQ9bHg6dSuC80GaccRdMNQ63.jpg', '01:50 PM', '24-01-2025', '8.5060865, 76.9535059', '1', '2025-01-24 08:19:59', '2025-01-24 08:20:24'),
-(40, 5, '55', 'odometer/Bsvbop4yRYvndErSlZMHJK2CIipmvaYPx2uP2a4z.jpg', '12:02 PM', '29-01-2025', '11.1807892, 75.8545805', '55', 'odometer/TxdvoiPSmyOXqd2c9pP9Ylxz6FO8bkCk1E0ScEoK.jpg', '12:08 PM', '29-01-2025', '11.1807892, 75.8545805', '1', '2025-01-29 06:32:37', '2025-01-29 06:38:48'),
-(41, 5, '22', 'odometer/RLnv0EHsJkh2LQvnrN3NWks1PO4i4gIq5QOuYM46.jpg', '12:09 PM', '29-01-2025', '11.1807892, 75.8545805', '33', 'odometer/LRh6sS9km24xmk7VQ9pQ5PpmFq051RCTqseTy1Mq.jpg', '12:09 PM', '29-01-2025', '11.1807892, 75.8545805', '1', '2025-01-29 06:39:27', '2025-01-29 06:39:50'),
 (42, 18, '22', 'odometer/RUoORIWOvxSk9XxaaugslmGrEeK4IOJQntb75w6J.jpg', '04:45 PM', '03-02-2025', '11.1807902, 75.8545733', NULL, NULL, NULL, NULL, NULL, '0', '2025-02-03 11:15:38', '2025-02-03 11:15:38'),
-(43, 3, '22', 'odometer/35opfzAQvCrI6ifPXms5aVCHaYtOsltifc7AXajJ.jpg', '05:03 PM', '03-02-2025', '11.180793, 75.854581', '56', 'odometer/fSOgha2FXzPnfRdYm95aFxLs6EKAHB67W0f91lDz.jpg', '05:03 PM', '03-02-2025', '11.180793, 75.854581', '1', '2025-02-03 11:33:30', '2025-02-03 11:33:45'),
-(44, 18, '100', 'odometer/TGsUAYcyKP9sJWF1bpZdM8DkSn0yvyUuBlCEbTmO.jpg', '09:45 AM', '14-03-2025', '11.1807891, 75.8545831', '108', 'odometer/wl4db9hbiIlSH5LMSA8IjlhIvPebWOvwCuKjILI3.jpg', '09:46 AM', '14-03-2025', '11.1807891, 75.8545831', '1', '2025-03-14 04:15:45', '2025-03-14 04:16:08'),
-(45, 3, '80', 'odometer/qGeTWRcjyGpjMVLMyTXNR2EqHyvQr8zZiFaD7on4.jpg', '08:45 AM', '24-03-2025', '11.1807975, 75.8545761', '780', 'odometer/z3uLCv8s1Syrjv8Xv9DlvYKRKttIyacJ7alRtezy.jpg', '08:46 AM', '24-03-2025', '11.1807975, 75.8545761', '1', '2025-03-24 03:15:45', '2025-03-24 03:16:21'),
-(46, 29, '80', 'odometer/ftQBtseaCtLTKsxzjWuWxEhCRKqcFUbBq7KMxmt7.png', '12:56 PM', '18-06-2025', '12311223,456987', NULL, NULL, NULL, NULL, NULL, '0', '2025-06-18 07:26:32', '2025-06-18 07:26:32'),
-(47, 29, '80', 'odometer/ndkjQWezAXBJUARtpyiS6I2VvYEv75H8yQ05I9cK.png', '12:58 PM', '18-06-2025', '12311223,456987', '151', 'odometer/poWIX31IdHPV81WRiBIenJ7BDnRwQYvxgfo5hv7x.png', '01:46 PM', '18-06-2025', '789456,321654', '1', '2025-06-18 07:28:53', '2025-06-18 08:16:17');
+(48, 12, '200', 'odometer/Rylh6fooQ5mKZaxILD5qyZxDM546lvPnzfPRf42s.jpg', '03:18 PM', '04-09-2025', 'fffffs', '200', 'odometer/5UEY4FolpB0MED83HpIOG2LKE50HnVQXPuZjutSJ.jpg', '03:21 PM', '04-09-2025', 'fffffs', '1', '2025-09-04 09:48:15', '2025-09-04 09:51:07'),
+(49, 12, '200', 'odometer/6NQloGSXpxMR2d5cVgCvqc20Z7zC1NXrELEcJTqW.jpg', '03:21 PM', '04-09-2025', 'fffffs', '200', 'odometer/rjtANDlozysoY3IWK0SiPzKD9c7KsiXe6FlJOGQE.jpg', '03:22 PM', '04-09-2025', 'fffffs', '1', '2025-09-04 09:51:29', '2025-09-04 09:52:20'),
+(50, 12, '200', 'odometer/q6iATovdFyh1zIgvbm5RGeR1kG0nVxo84x45pXk8.jpg', '03:35 PM', '04-09-2025', 'fffffs', '200', 'odometer/k3QISTXRyfbrGO5XISwuc2p0nezMXf5vc9piuzh2.jpg', '03:45 PM', '04-09-2025', 'fffffs', '1', '2025-09-04 10:05:33', '2025-09-04 10:15:08'),
+(51, 12, '200', 'odometer/e8vUr5YHipeETpm3cTOslDxJMQDyLrTo0WUzuuCD.jpg', '03:48 PM', '04-09-2025', 'fffffs', NULL, NULL, NULL, NULL, NULL, '0', '2025-09-04 10:18:12', '2025-09-04 10:18:12'),
+(52, 12, '200', 'odometer/ZV22ya1Dv6m6Iqc5QwMFg26NkS5l0e5SAFsDCQAB.jpg', '03:50 PM', '04-09-2025', 'fffffs', NULL, NULL, '04:50 PM', '04-09-2025', NULL, '0', '2025-09-04 10:26:03', '2025-09-04 10:26:03'),
+(53, 12, '200', 'odometer/NtAt1eIB4afXrv1gRQWXyzEXRtFikMktejevAPm1.jpg', '09:25 AM', '06-09-2025', 'fffffs', NULL, NULL, NULL, NULL, NULL, '0', '2025-09-06 03:55:48', '2025-09-06 03:55:48');
 
 -- --------------------------------------------------------
 
@@ -689,18 +677,10 @@ CREATE TABLE `owner_data` (
   `owner_ration_card` varchar(255) DEFAULT NULL,
   `owner_driving_license` varchar(255) DEFAULT NULL,
   `what_is_owner_license_number` varchar(255) DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `owner_data`
---
-
-INSERT INTO `owner_data` (`id`, `assign_work_id`, `executive_id`, `who_did_you_meet_regarding_the_accident_name_role`, `what_was_discussed_in_the_meeting`, `date_of_the_meeting`, `was_any_agreement_or_document_signed`, `next_steps_discussed_in_the_meeting`, `owner_ration_card`, `owner_driving_license`, `what_is_owner_license_number`, `created_at`, `updated_at`) VALUES
-(8, 1, 12, NULL, NULL, '2024-05-08', NULL, NULL, NULL, NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(9, 1, 12, NULL, NULL, '2024-05-08', NULL, NULL, NULL, NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(10, 1, 12, NULL, NULL, '2024-05-08', NULL, NULL, NULL, NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
 
 -- --------------------------------------------------------
 
@@ -723,15 +703,6 @@ CREATE TABLE `owner_data_old` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `owner_data_old`
---
-
-INSERT INTO `owner_data_old` (`id`, `assign_work_id`, `executive_id`, `who_did_you_meet_regarding_the_accident_name_role`, `what_was_discussed_in_the_meeting`, `date_of_the_meeting`, `was_any_agreement_or_document_signed`, `next_steps_discussed_in_the_meeting`, `owner_ration_card`, `owner_driving_license`, `what_is_owner_license_number`, `created_at`, `updated_at`) VALUES
-(8, 1, 12, NULL, NULL, '2024-05-08', NULL, NULL, NULL, NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(9, 1, 12, NULL, NULL, '2024-05-08', NULL, NULL, NULL, NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(10, 1, 12, NULL, NULL, '2024-05-08', NULL, NULL, NULL, NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
 
 -- --------------------------------------------------------
 
@@ -799,9 +770,9 @@ CREATE TABLE `questionnaire_submissions` (
 --
 
 INSERT INTO `questionnaire_submissions` (`id`, `case_id`, `full_data`, `created_at`, `updated_at`) VALUES
-(3, 2, '{\"id\":2,\"assign_id\":1,\"works\":[{\"work\":\"profile\",\"case_work_id\":null,\"questionnaire\":[]},{\"work\":\"driver\",\"case_work_id\":\"driver965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"data\":\"9961242776\"}}},{\"work\":\"garage\",\"case_work_id\":\"garage965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"data\":\"Garage786\"}}},{\"work\":\"spot\",\"case_work_id\":\"spot965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"enter_the_address_or_coordinates_of_the_accident_spot\":{\"name\":\"enter_the_address_or_coordinates_of_the_accident_spot\",\"data\":\"Spot44\"}}},{\"work\":\"meeting\",\"case_work_id\":\"meeting965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"date_of_the_meeting\":{\"name\":\"date_of_the_meeting\",\"data\":\"2024-05-08\"}}}]}', '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(4, 2, '{\"id\":2,\"assign_id\":1,\"works\":[{\"work\":\"profile\",\"case_work_id\":null,\"questionnaire\":[]},{\"work\":\"driver\",\"case_work_id\":\"driver965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"data\":\"9961242776\"}}},{\"work\":\"garage\",\"case_work_id\":\"garage965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"data\":\"Garage786\"},\"upload_a_photo_of_the_garage_sign_or_front_view\":{\"name\":\"upload_a_photo_of_the_garage_sign_or_front_view\",\"data\":\"uploads\\/zhjn6hCrav3vQOY6LitVLVh9f4B358SifFpX4Vum.png\"}}},{\"work\":\"spot\",\"case_work_id\":\"spot965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"enter_the_address_or_coordinates_of_the_accident_spot\":{\"name\":\"enter_the_address_or_coordinates_of_the_accident_spot\",\"data\":\"Spot44\"}}},{\"work\":\"meeting\",\"case_work_id\":\"meeting965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"date_of_the_meeting\":{\"name\":\"date_of_the_meeting\",\"data\":\"2024-05-08\"}}}]}', '2025-09-02 10:23:26', '2025-09-02 10:33:22'),
-(5, 2, '{\"id\":2,\"assign_id\":1,\"works\":[{\"work\":\"profile\",\"case_work_id\":null,\"questionnaire\":[]},{\"work\":\"driver\",\"case_work_id\":\"driver965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"data\":\"9961242776\"}}},{\"work\":\"garage\",\"case_work_id\":\"garage965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"data\":\"Garage786\"},\"upload_a_photo_of_the_garage_sign_or_front_view\":{\"name\":\"upload_a_photo_of_the_garage_sign_or_front_view\",\"data\":\"uploads\\/zhjn6hCrav3vQOY6LitVLVh9f4B358SifFpX4Vum.png\"}}},{\"work\":\"spot\",\"case_work_id\":\"spot965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"enter_the_address_or_coordinates_of_the_accident_spot\":{\"name\":\"enter_the_address_or_coordinates_of_the_accident_spot\",\"data\":\"Spot44\"}}},{\"work\":\"meeting\",\"case_work_id\":\"meeting965652347622025-09-02 14:34:40\",\"executive_id\":12,\"questionnaire\":{\"date_of_the_meeting\":{\"name\":\"date_of_the_meeting\",\"data\":\"2024-05-08\"}}}]}', '2025-09-02 10:34:38', '2025-09-02 10:34:38');
+(1, 1, '{\"id\":1,\"assign_id\":1,\"works\":[{\"work\":\"profile\",\"case_work_id\":null,\"questionnaire\":[]},{\"work\":\"garage\",\"case_work_id\":\"garage965652312312025-09-08 09:45:14\",\"executive_id\":11,\"questionnaire\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"data\":\"Garage 345\"},\"upload_a_photo_of_the_garage_sign_or_front_view\":{\"name\":\"upload_a_photo_of_the_garage_sign_or_front_view\",\"data\":\"garage_uploads\\/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg\"}}},{\"work\":\"driver\",\"case_work_id\":\"driver965652312312025-09-08 09:45:14\",\"executive_id\":11,\"questionnaire\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"data\":\"9961245588\"}}}]}', '2025-09-08 04:22:45', '2025-09-08 04:22:45'),
+(2, 1, '{\"id\":1,\"assign_id\":1,\"works\":[{\"work\":\"profile\",\"case_work_id\":null,\"questionnaire\":[]},{\"work\":\"garage\",\"case_work_id\":\"garage965652312312025-09-08 09:45:14\",\"executive_id\":11,\"questionnaire\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"data\":\"Garage 345\"},\"upload_a_photo_of_the_garage_sign_or_front_view\":{\"name\":\"upload_a_photo_of_the_garage_sign_or_front_view\",\"data\":\"garage_uploads\\/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg\"}}},{\"work\":\"driver\",\"case_work_id\":\"driver965652312312025-09-08 09:45:14\",\"executive_id\":11,\"questionnaire\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"data\":\"9961245588\"}}}]}', '2025-09-08 04:26:46', '2025-09-08 04:26:46'),
+(3, 1, '{\"id\":1,\"assign_id\":1,\"works\":[{\"work\":\"profile\",\"case_work_id\":null,\"questionnaire\":[]},{\"work\":\"garage\",\"case_work_id\":\"garage965652312312025-09-08 09:45:14\",\"executive_id\":11,\"questionnaire\":{\"what_is_the_name_of_the_garage\":{\"name\":\"what_is_the_name_of_the_garage\",\"data\":\"Garage 345\"},\"upload_a_photo_of_the_garage_sign_or_front_view\":{\"name\":\"upload_a_photo_of_the_garage_sign_or_front_view\",\"data\":\"garage_uploads\\/i2pApzNzvtq1bjVeqOYgtfnmxQIX7PWxPwCH1GRl.jpg\"}}},{\"work\":\"driver\",\"case_work_id\":\"driver965652312312025-09-08 09:45:14\",\"executive_id\":11,\"questionnaire\":{\"what_is_the_drivers_contact_number\":{\"name\":\"what_is_the_drivers_contact_number\",\"data\":\"9961245588\"}}}]}', '2025-09-08 04:33:15', '2025-09-08 04:33:15');
 
 -- --------------------------------------------------------
 
@@ -845,8 +816,36 @@ INSERT INTO `questions` (`id`, `question`, `input_type`, `data_category`, `colum
 (19, 'Upload photos of the vehicle damage.', 'file', 'accident_person_data', 'upload_photos_of_the_vehicle_damage', '#FNSPL22', 'image', '2025-07-13 22:57:26', '2025-07-13 22:57:26'),
 (20, 'Was anyone injured in the accident?', 'select', 'accident_person_data', 'was_anyone_injured_in_the_accident', '#WYU9469', NULL, '2025-07-13 22:57:42', '2025-07-13 22:57:42'),
 (21, 'owner ration card', 'file', 'owner_data', 'owner_ration_card', '#XVCI533', 'image', '2025-07-23 19:02:04', '2025-07-23 19:02:04'),
-(41, 'what is garage id', 'text', 'garage_data', 'what_is_garage_id', '#9Q2GS63', NULL, '2025-08-07 16:41:07', '2025-08-07 16:41:07'),
-(42, 'what is owner license number', 'text', 'owner_data', 'what_is_owner_license_number', '#0LXJD43', NULL, '2025-08-07 16:41:36', '2025-08-07 16:41:36');
+(41, 'what is garage car', 'text', 'garage_data', 'what_is_garage_car', '#9Q2GS63', NULL, '2025-08-07 16:41:07', '2025-09-06 11:07:35'),
+(42, 'what is owner license number', 'text', 'owner_data', 'what_is_owner_license_number', '#0LXJD43', NULL, '2025-08-07 16:41:36', '2025-08-07 16:41:36'),
+(43, 'Questions 45', 'text', 'garage_data', 'questions_45', '#8HBGP90', NULL, '2025-09-08 05:11:35', '2025-09-08 05:11:35');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `question_template`
+--
+
+CREATE TABLE `question_template` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `question_id` bigint(20) UNSIGNED NOT NULL,
+  `template_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `question_template`
+--
+
+INSERT INTO `question_template` (`id`, `question_id`, `template_id`, `created_at`, `updated_at`) VALUES
+(4, 41, 7, NULL, NULL),
+(5, 8, 8, NULL, NULL),
+(6, 41, 8, NULL, NULL),
+(7, 7, 8, NULL, NULL),
+(8, 10, 9, NULL, NULL),
+(9, 20, 9, NULL, NULL),
+(10, 9, 9, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -890,18 +889,10 @@ CREATE TABLE `spot_data` (
   `enter_the_address_or_coordinates_of_the_accident_spot` varchar(255) DEFAULT NULL,
   `were_any_traffic_signals_nearby` varchar(255) DEFAULT NULL,
   `was_there_any_police_presence_at_the_location` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `spot_data`
---
-
-INSERT INTO `spot_data` (`id`, `assign_work_id`, `executive_id`, `enter_the_address_or_coordinates_of_the_accident_spot`, `were_any_traffic_signals_nearby`, `was_there_any_police_presence_at_the_location`, `created_at`, `updated_at`) VALUES
-(6, 1, 12, 'Spot44', NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(7, 1, 12, 'Spot44', NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(8, 1, 12, 'Spot44', NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
 
 -- --------------------------------------------------------
 
@@ -920,15 +911,6 @@ CREATE TABLE `spot_data_old` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `spot_data_old`
---
-
-INSERT INTO `spot_data_old` (`id`, `assign_work_id`, `executive_id`, `enter_the_address_or_coordinates_of_the_accident_spot`, `were_any_traffic_signals_nearby`, `was_there_any_police_presence_at_the_location`, `created_at`, `updated_at`) VALUES
-(6, 1, 12, 'Spot44', NULL, NULL, '2025-09-02 09:13:44', '2025-09-02 09:13:44'),
-(7, 1, 12, 'Spot44', NULL, NULL, '2025-09-02 10:23:26', '2025-09-02 10:23:26'),
-(8, 1, 12, 'Spot44', NULL, NULL, '2025-09-02 10:34:38', '2025-09-02 10:34:38');
-
 -- --------------------------------------------------------
 
 --
@@ -937,12 +919,20 @@ INSERT INTO `spot_data_old` (`id`, `assign_work_id`, `executive_id`, `enter_the_
 
 CREATE TABLE `templates` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `company_id` bigint(20) UNSIGNED NOT NULL,
-  `table_name` varchar(255) NOT NULL,
-  `fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`fields`)),
+  `company_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `template_id` varchar(100) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `templates`
+--
+
+INSERT INTO `templates` (`id`, `company_id`, `template_id`, `created_at`, `updated_at`) VALUES
+(7, NULL, 'TEMPLATES007', '2025-09-06 17:22:54', '2025-09-06 17:22:54'),
+(8, NULL, 'TEMPLATES008', '2025-09-06 17:46:28', '2025-09-06 17:46:28'),
+(9, NULL, 'TEMPLATES009', '2025-09-07 14:43:31', '2025-09-07 14:43:31');
 
 -- --------------------------------------------------------
 
@@ -977,7 +967,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `phone`, `email`, `profile_image`, `place`, `email_verified_at`, `password`, `role`, `login_request`, `imei`, `status`, `create_by`, `update_by`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin', '7708782197', 'admin@mail.com', 'profile_images/5QUjKECzJ5jaJur1LAze10NBVfFjTJbiSAQDsmcP.jpg', NULL, NULL, '$2y$12$6hERzWTNcZaQLzgkm4ea.uFsdz1kLmbKVvsAgXz3WXxwiKjthYAqa', '1', 0, NULL, '1', NULL, NULL, NULL, '2024-10-02 16:41:07', '2025-09-03 07:15:00'),
 (2, 'NivTest Mob', '9048007933', 'test@gmail.com', NULL, 'Kondotty', NULL, '$2y$12$kGwXWtszf2BlzX5O1uKb9./yn4exNIxFiryA1Ka4XeAaViHoni34i', '3', 0, NULL, '1', '1', '1', NULL, '2025-07-13 23:01:36', '2025-07-21 21:41:00'),
-(12, 'Test44', '9497626144', 'test44@mail.com', NULL, 'kannur', NULL, '$2y$12$b6aj6uF8maY3Wd2vI.qtNe8O9oyNLDaF0CM.mkdHVHk/UPcu.NoyG', '3', 0, NULL, '1', '1', '1', NULL, '2025-09-01 19:46:34', '2025-09-03 07:54:14');
+(12, 'Test44', '9497626144', 'test44@mail.com', NULL, 'kannur', NULL, '$2y$12$b6aj6uF8maY3Wd2vI.qtNe8O9oyNLDaF0CM.mkdHVHk/UPcu.NoyG', '3', 0, NULL, '1', '1', '1', NULL, '2025-09-01 19:46:34', '2025-09-08 04:11:35');
 
 --
 -- Indexes for dumped tables
@@ -1203,6 +1193,14 @@ ALTER TABLE `questions`
   ADD KEY `idx_unique_key` (`unique_key`);
 
 --
+-- Indexes for table `question_template`
+--
+ALTER TABLE `question_template`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `question_template_question_id_foreign` (`question_id`),
+  ADD KEY `question_template_template_id_foreign` (`template_id`);
+
+--
 -- Indexes for table `salaries`
 --
 ALTER TABLE `salaries`
@@ -1262,25 +1260,31 @@ ALTER TABLE `accident_person_data_old`
 -- AUTO_INCREMENT for table `assign_work_data`
 --
 ALTER TABLE `assign_work_data`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `case_assignments`
 --
 ALTER TABLE `case_assignments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `company_logos`
+--
+ALTER TABLE `company_logos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `driver_data`
 --
 ALTER TABLE `driver_data`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `driver_data_old`
 --
 ALTER TABLE `driver_data_old`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `final_reports`
@@ -1298,31 +1302,31 @@ ALTER TABLE `final_reports_new`
 -- AUTO_INCREMENT for table `garage_data`
 --
 ALTER TABLE `garage_data`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `garage_data_old`
 --
 ALTER TABLE `garage_data_old`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `insurance_cases`
 --
 ALTER TABLE `insurance_cases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `insurance_companies`
 --
 ALTER TABLE `insurance_companies`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `insurance_customers`
 --
 ALTER TABLE `insurance_customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -1334,19 +1338,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `odometer_readings`
 --
 ALTER TABLE `odometer_readings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `owner_data`
 --
 ALTER TABLE `owner_data`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `owner_data_old`
 --
 ALTER TABLE `owner_data_old`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `password_reset_requests`
@@ -1364,13 +1368,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `questionnaire_submissions`
 --
 ALTER TABLE `questionnaire_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT for table `question_template`
+--
+ALTER TABLE `question_template`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `salaries`
@@ -1382,25 +1392,36 @@ ALTER TABLE `salaries`
 -- AUTO_INCREMENT for table `spot_data`
 --
 ALTER TABLE `spot_data`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `spot_data_old`
 --
 ALTER TABLE `spot_data_old`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `templates`
 --
 ALTER TABLE `templates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `question_template`
+--
+ALTER TABLE `question_template`
+  ADD CONSTRAINT `question_template_question_id_foreign` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `question_template_template_id_foreign` FOREIGN KEY (`template_id`) REFERENCES `templates` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

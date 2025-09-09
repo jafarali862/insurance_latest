@@ -10,19 +10,25 @@ class Template extends Model
     use HasFactory;
      protected $fillable = [
         'company_id',
-        'table_name',
-        'template_name',
-        'fields',
+        'template_id',
+
     ];
 
-    protected $casts = [
-        'fields' => 'array', // Automatically cast JSON to array
-    ];
 
     public function company()
     {
         return $this->belongsTo(InsuranceCompany::class, 'company_id');
     }
+
+    // Template.php
+   public function questions()
+{
+    return $this->belongsToMany(Question::class, 'question_template');
+}
+
+
+    
+
 }
 
 

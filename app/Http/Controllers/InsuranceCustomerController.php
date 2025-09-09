@@ -128,6 +128,7 @@ class InsuranceCustomerController extends Controller
         $companies = InsuranceCompany::where('status', '!=', 0)->orderBy('id','desc')->get();
         $users = User::where('role', '!=', 1)->where('status', '!=', 0)->get();
         $executives = User::where('role', '!=', 1)->get();
+        
         return view("dashboard.insurance.create")->with(["companies" => $companies, "executives" => $executives,"users"=>$users,'insuranceCustomer'=>$insuranceCustomer]);
     }
 

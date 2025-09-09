@@ -23,31 +23,50 @@ class ExecutiveController extends Controller
 
     public function odometerList(Request $request)
     {
+        // $query = DB::table('odometer_readings')
+        // ->leftJoin('users', 'odometer_readings.user_id', '=', 'users.id')
+        // ->select('odometer_readings.*', 'users.name as user_name');
+
+        // if ($request->filled('from_date')) {
+        // $query->whereDate('odometer_readings.created_at', '>=', $request->from_date);
+        // }
+
+        // if ($request->filled('to_date')) {
+        // $query->whereDate('odometer_readings.created_at', '<=', $request->to_date);
+        // }
+
+        // // Default to today's records if no filters
+        // // if (!$request->filled('from_date') && !$request->filled('to_date')) {
+        // // $query->whereDate('odometer_readings.created_at', today());
+        // // }
+
+        // $data = $query->orderBy('odometer_readings.updated_at', 'desc')->paginate(10);
+
+        // return view('dashboard.odometer.index')->with([
+        // 'odometerRecords' => $data,
+        // 'from_date' => $request->from_date,
+        // 'to_date' => $request->to_date,
+        // ]);
+
         $query = DB::table('odometer_readings')
         ->leftJoin('users', 'odometer_readings.user_id', '=', 'users.id')
         ->select('odometer_readings.*', 'users.name as user_name');
 
-        // Apply date filters if provided
-        if ($request->filled('from_date')) {
+    if ($request->filled('from_date')) {
         $query->whereDate('odometer_readings.created_at', '>=', $request->from_date);
-        }
+    }
 
-        if ($request->filled('to_date')) {
+    if ($request->filled('to_date')) {
         $query->whereDate('odometer_readings.created_at', '<=', $request->to_date);
-        }
+    }
 
-        // Default to today's records if no filters
-        // if (!$request->filled('from_date') && !$request->filled('to_date')) {
-        // $query->whereDate('odometer_readings.created_at', today());
-        // }
+    $data = $query->orderBy('odometer_readings.updated_at', 'desc')->get(); // NOTE: ->get()
 
-        $data = $query->orderBy('odometer_readings.updated_at', 'desc')->paginate(10);
-
-        return view('dashboard.odometer.index')->with([
+    return view('dashboard.odometer.index')->with([
         'odometerRecords' => $data,
         'from_date' => $request->from_date,
         'to_date' => $request->to_date,
-        ]);
+    ]);
     }
 
 

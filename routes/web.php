@@ -52,7 +52,9 @@ Route::middleware(["web.auth"])->group(function () {
     Route::get("/home", [AuthController::class, "dashboard"])->name("dashboard");
 
     //Admin Access URL
-    Route::middleware(['role:1'])->group(function () {
+    Route::middleware(['role:1'])->group(function () 
+    {
+
         //User
         Route::get("/all-user", [UserController::class, "index"])->name("user.list");
         Route::get("/add-user", [UserController::class, "create"])->name("user.create");
@@ -69,6 +71,8 @@ Route::middleware(["web.auth"])->group(function () {
         Route::post("/save-company", [CompanyController::class, "store"])->name("companies.store");
         Route::get("/edit-company/{id}", [CompanyController::class, "edit"])->name("companies.edit");
         Route::post("/update-company", [CompanyController::class, "update"])->name("company.update");
+        Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
+
 
         // Questiionnaire
         Route::get("/add-questionnaire", [CompanyController::class, "create_question"])->name("company.create_question");
@@ -80,8 +84,6 @@ Route::middleware(["web.auth"])->group(function () {
         Route::put('/questions/{id}', [CompanyController::class, 'update_question'])->name('questions.update_question');
         Route::delete('/questions/{id}', [CompanyController::class, 'destroy_question'])->name('questions.destroy_question');
         Route::get('/questions/{category}', [CompanyController::class, 'getQuestionsByCategory']);
-
-
         Route::get('/category', [CompanyController::class, 'index_category'])->name('category.index');
 
         //Insurance Customer
@@ -129,15 +131,27 @@ Route::middleware(["web.auth"])->group(function () {
         Route::post('/save-selected', [ReportGenerateController::class, 'saveSelected'])->name('save.selected');
 
         // Route::get('/final-report/preview/{reportId}', [FinalReportController::class, 'preview'])->name('final.report.preview');
+        
+        // Templates
 
+        // Route::get('/templates/create', [CompanyController::class, 'create_templates'])->name('templates.create_templates');
+        // Route::post('/templates', [CompanyController::class, 'store_templates'])->name('templates.store_templates');
+        // Route::get('/templates', [CompanyController::class, 'list_templates'])->name('templates.list_templates');
+        // Route::get('/templates/{template}/edit', [CompanyController::class, 'edit_templates'])->name('templates.edit_templates');
+        // Route::post('/templates/{template}/update', [CompanyController::class, 'update_templates'])->name('templates.update_templates');
+        // Route::delete('/templates/{template}/delete', [CompanyController::class, 'delete_template'])->name('templates.delete_template');
 
         Route::get('/templates/create', [CompanyController::class, 'create_templates'])->name('templates.create_templates');
         Route::post('/templates', [CompanyController::class, 'store_templates'])->name('templates.store_templates');
         Route::get('/templates', [CompanyController::class, 'list_templates'])->name('templates.list_templates');
         Route::get('/templates/{template}/edit', [CompanyController::class, 'edit_templates'])->name('templates.edit_templates');
         Route::post('/templates/{template}/update', [CompanyController::class, 'update_templates'])->name('templates.update_templates');
+        Route::delete('/templates/{template}', [CompanyController::class, 'destroy_templates'])->name('templates.destroy_templates');
+        Route::get('/templates/{id}/preview', [CompanyController::class, 'preview'])->name('templates.preview');
+        Route::get('/get-template-tabs/{id}', [CompanyController::class, 'getTemplateTabs']);
 
-       
+
+
 
         //Report Re-Assign
         Route::post('/garage-re-assign', [ReportGenerateController::class, 'garageReAssign'])->name('garage.re.assign');
@@ -183,10 +197,8 @@ Route::middleware(["web.auth"])->group(function () {
         //Owner section Reasign
         Route::get('/spot/{id}', [SpotUpdateController::class, 'spotSpecialCase'])->name('spot-special-case');
 
-
          //Owner section Reasign
-         Route::get('/owner/{id}', [OwnerUpdateController::class, 'ownerSpecialCase'])->name('owner-special-case');
-
+        Route::get('/owner/{id}', [OwnerUpdateController::class, 'ownerSpecialCase'])->name('owner-special-case');
 
         //Accident section Reasign
         Route::get('/accident/{id}', [AccidentUpdateController::class, 'accidentSpecialCase'])->name('accident-special-case');
@@ -223,8 +235,7 @@ Route::middleware(["web.auth"])->group(function () {
         Route::post('/accident-person-re-assign', [ReportGenerateController::class, 'accidentPersonReAssign'])->name('accident.person.re.assign');
 
 
-       Route::get('/users/{id}/profile-image-form', [CaseAssignmentController::class, 'showUploadForm'])->name('profile.upload.form');
-
+        Route::get('/users/{id}/profile-image-form', [CaseAssignmentController::class, 'showUploadForm'])->name('profile.upload.form');
         Route::post('/users/{id}/profile-image', [CaseAssignmentController::class, 'upload'])->name('profile.upload');
         Route::get('/users/{id}/profile-image', [CaseAssignmentController::class, 'show'])->name('profile.show');
       
@@ -243,12 +254,12 @@ Route::middleware(["web.auth"])->group(function () {
     Route::post("/logout", [AuthController::class, "logout"])->name("logout");
 });
 
-//For Mobile Web 
-Route::get('/report-mobile/{id}', [WebController::class, 'report'])->name('report.name');
-Route::get('/salary-report/{id}', [WebController::class, 'salaryReport'])->name('salary.report');
-Route::get('/today-record/{id}', [WebController::class, 'todayRecord'])->name('today.record');
-Route::get('/monthly-record/{id}', [WebController::class, 'monthlyRecord'])->name('monthly.record');
-Route::get('/executive-help-support', [WebController::class, 'helpSupport'])->name('help.support');
-Route::get('/mobile-odometer-list/{id}', [WebController::class, 'odometer'])->name('mobile.odometer');
+    //For Mobile Web 
+    Route::get('/report-mobile/{id}', [WebController::class, 'report'])->name('report.name');
+    Route::get('/salary-report/{id}', [WebController::class, 'salaryReport'])->name('salary.report');
+    Route::get('/today-record/{id}', [WebController::class, 'todayRecord'])->name('today.record');
+    Route::get('/monthly-record/{id}', [WebController::class, 'monthlyRecord'])->name('monthly.record');
+    Route::get('/executive-help-support', [WebController::class, 'helpSupport'])->name('help.support');
+    Route::get('/mobile-odometer-list/{id}', [WebController::class, 'odometer'])->name('mobile.odometer');
 
 
